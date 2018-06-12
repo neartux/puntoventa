@@ -1,0 +1,37 @@
+**************PENDING*******************
+
+1.- Soporte para vender productos agranel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**********PROBLEMS****************
+
+1.- Problemas con el plugin de maatwebsite/excel, error de Class 'ZipArchive' not found, se corrigio con:
+sudo apt-get install php7.0-zip
