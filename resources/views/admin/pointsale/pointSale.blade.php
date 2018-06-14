@@ -184,13 +184,8 @@
                                                            min="1"></td>
                                                 <td>@{{ product.price * product.quantity | currency }}</td>
                                                 <td>
-                                                    <span data-ng-show="(product.current_stock-product.quantity) <= product.minimum_stock"
+                                                    <span data-ng-class="(product.current_stock-product.quantity) <= product.minimum_stock ? 'font-red' : 'font-blue'"
                                                           class="font-red bold set-cursor-pointer" title="Agregar @{{ product.description }} a pedido"
-                                                          data-ng-click="ctrl.addProductToOrder(product.id);">
-                                                        @{{ product.current_stock - product.quantity }}
-                                                    </span>
-                                                    <span data-ng-show="(product.current_stock-product.quantity) > product.minimum_stock"
-                                                          class="font-blue bold set-cursor-pointer" title="Agregar @{{ product.description }} a pedido"
                                                           data-ng-click="ctrl.addProductToOrder(product.id);">
                                                         @{{ product.current_stock - product.quantity }}
                                                     </span>
@@ -226,16 +221,15 @@
                                                         @{{ product.percent_discount }} %
                                                     </span>
                                                 </td>
-                                                <td>@{{ product.quantity }}</td>
-                                                <td>@{{ product.price | currency }}</td>
                                                 <td>
-                                                    <span data-ng-show="(product.current_stock-product.quantity) <= product.minimum_stock"
-                                                          class="font-red bold set-cursor-pointer" title="Agregar @{{ product.description }} a pedido"
-                                                          data-ng-click="ctrl.addProductToOrder(product.id);">
-                                                        @{{ product.current_stock - product.quantity }}
-                                                    </span>
-                                                    <span data-ng-show="(product.current_stock-product.quantity) > product.minimum_stock"
-                                                          class="font-blue bold set-cursor-pointer" title="Agregar @{{ product.description }} a pedido"
+                                                    @{{ product.quantity }}
+                                                    <i class="icon-login" data-ng-click="ctrl.updateBulkProductQuantities($index);"
+                                                       title="Actualiza cantidad"></i>
+                                                </td>
+                                                <td>@{{ (product.price * product.quantity) | currency }}</td>
+                                                <td>
+                                                    <span data-ng-class="(product.current_stock-product.quantity) <= product.minimum_stock ? 'font-red' : 'font-blue'"
+                                                          class="bold set-cursor-pointer" title="Agregar @{{ product.description }} a pedido"
                                                           data-ng-click="ctrl.addProductToOrder(product.id);">
                                                         @{{ product.current_stock - product.quantity }}
                                                     </span>

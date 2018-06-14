@@ -299,8 +299,9 @@
             else {
                 ctrl.temporalProductBulk = product;
                 ctrl.temporalProductBulk.isBulkProduct = true;
-                ctrl.temporalProductBulk.quantityInBulk = parseFloat(NUMBER_ONE).toFixed(NUMBERS_OF_DECIMALS);
+                ctrl.temporalProductBulk.quantity = parseFloat(NUMBER_ONE).toFixed(NUMBERS_OF_DECIMALS);
                 ctrl.temporalProductBulk.importInBulk = parseFloat(product.sale_price).toFixed(NUMBERS_OF_DECIMALS);
+                ctrl.temporalProductBulk.price = parseFloat(product.sale_price).toFixed(NUMBERS_OF_DECIMALS);
             }
             $("#bulkModal").modal();
         };
@@ -309,8 +310,8 @@
          * Calcula el importe total de un producto agranel, cambiando la cantidad a llevar
          */
         ctrl.calculateBulkImportToProduct = function () {
-            var importe = (ctrl.temporalProductBulk.quantityInBulk * ctrl.temporalProductBulk.sale_price);
-            ctrl.temporalProductBulk.importInBulk = parseFloat(importe).toFixed(NUMBERS_OF_DECIMALS);
+            var importe = (ctrl.temporalProductBulk.quantity * ctrl.temporalProductBulk.price);
+            ctrl.temporalProductBulk.importInBulk = isNaN(importe) ? NUMBER_ZERO :  parseFloat(importe).toFixed(NUMBERS_OF_DECIMALS);
         };
 
 
@@ -318,8 +319,8 @@
          * Calcula la cantidad de un producto agranel, modificando el monto a llevar
          */
         ctrl.calculateQuantityBulkProduct = function () {
-            var quantity = (ctrl.temporalProductBulk.importInBulk/ctrl.temporalProductBulk.sale_price);
-            ctrl.temporalProductBulk.quantityInBulk = parseFloat(quantity).toFixed(2);
+            var quantity = (ctrl.temporalProductBulk.importInBulk/ctrl.temporalProductBulk.price);
+            ctrl.temporalProductBulk.quantity = isNaN(quantity) ? NUMBER_ZERO : parseFloat(quantity).toFixed(2);
         };
 
         /**
@@ -330,11 +331,9 @@
             if(ctrl.temporalProductBulk !== ELEMENT_NOT_FOUND && ctrl.validateBulkProduct()) {
                 var product = angular.copy(ctrl.temporalProductBulk);
 
-                product.quantity = ctrl.temporalProductBulk.quantityInBulk;
                 product.apply_wholesale = false;
                 product.apply_discount = false;
                 product.percent_discount = PERCENT_DISCOUNT_ZERO;
-                product.price = ctrl.temporalProductBulk.importInBulk;
                 product.originalPrice = product.sale_price;
                 ctrl.temporalProductBulk = ELEMENT_NOT_FOUND;
                 var indexProduct = ctrl.getIndexProduct(product.id);
@@ -358,7 +357,7 @@
          */
         ctrl.validateBulkProduct = function () {
             // Valida que la cantidad no este vacio
-            if(ctrl.temporalProductBulk.quantityInBulk <= NUMBER_ZERO || ctrl.temporalProductBulk.quantityInBulk === "" || isNaN(ctrl.temporalProductBulk.quantityInBulk)) {
+            if(ctrl.temporalProductBulk.quantity <= NUMBER_ZERO || ctrl.temporalProductBulk.quantity === "" || isNaN(ctrl.temporalProductBulk.quantity)) {
                 showNotification("Info", "Cantidad de producto requerido", "info");
                 return false;
             }
@@ -368,6 +367,16 @@
                 return false;
             }
             return true;
+        };
+
+        /**
+         * Muestra modal para actualizar los montos para un producto agranel
+         */
+        ctrl.updateBulkProductQuantities = function (indexProduct) {
+            var product = angular.copy(ctrl.ventaCompleta.products[indexProduct]);
+            ctrl.temporalProductBulk = product;
+            ctrl.temporalProductBulk.importInBulk = parseFloat(product.price * product.quantity).toFixed(NUMBERS_OF_DECIMALS);
+            $("#bulkModal").modal();
         };
 
         /**
@@ -867,8 +876,3 @@
     });
 
 })();
-
-
-// TODO pendientes de punto de venta
-// 1.- Al realizar una venta en la segunda se truena el autocomplete de productos
-// 2.- Checar funcionalidad de clientes

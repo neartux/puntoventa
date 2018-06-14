@@ -20,7 +20,7 @@
                         <div class="col-sm-6">
                             <label for="quantityProduct" class="bold">Cantidad de Producto</label>
                             <input type="text" class="form-control" id="quantityProduct"
-                                   data-ng-model="ctrl.temporalProductBulk.quantityInBulk"
+                                   data-ng-model="ctrl.temporalProductBulk.quantity"
                                    data-ng-change="ctrl.calculateBulkImportToProduct();"
                                    data-ng-enter="ctrl.addBulkProductToSale();">
                         </div>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12 text-center">
-                        <h4 class="bold">Precio Unidad = @{{ ctrl.temporalProductBulk.sale_price | currency }}</h4>
+                        <h4 class="bold">Precio Unidad = @{{ ctrl.temporalProductBulk.price | currency }}</h4>
                     </div>
                 </div>
 
