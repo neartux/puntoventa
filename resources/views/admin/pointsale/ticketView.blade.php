@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                 <tr data-ng-repeat="product in ctrl.ventaCompletaTO.products">
-                    <td ng-style="ctrl.bodyStyle">@{{ product.quantity }}</td>
+                    <td ng-style="ctrl.bodyStyle">@{{ product.quantity | number: 2 }}</td>
                     <td ng-style="ctrl.bodyStyle">@{{ product.description }}</td>
                     <td ng-style="ctrl.bodyStyle">@{{ product.price * product.quantity | currency }}</td>
                 </tr>
@@ -46,7 +46,7 @@
                         No. Articulos:
                     </td>
                     <td ng-style="ctrl.bodyStyle" class="text-left">
-                        @{{ ctrl.ventaCompletaTO.totalProducts }}
+                        @{{ ctrl.ventaCompletaTO.totalProducts | number: 2}}
                     </td>
                 </tr>
                 <tr class="text-right">

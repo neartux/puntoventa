@@ -231,7 +231,7 @@
                                                     <span data-ng-class="(product.current_stock-product.quantity) <= product.minimum_stock ? 'font-red' : 'font-blue'"
                                                           class="bold set-cursor-pointer" title="Agregar @{{ product.description }} a pedido"
                                                           data-ng-click="ctrl.addProductToOrder(product.id);">
-                                                        @{{ product.current_stock - product.quantity }}
+                                                        @{{ product.current_stock - product.quantity | number: 2 }}
                                                     </span>
                                                 </td>
                                             </tr>
