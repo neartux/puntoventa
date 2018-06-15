@@ -309,9 +309,9 @@
         /**
          * Calcula el importe total de un producto agranel, cambiando la cantidad a llevar
          */
-        ctrl.calculateBulkImportToProduct = function () {
+        ctrl.calculateBulkImportToProduct = function () { // TODO hay problemas con redondeo ver, los decimales
             var importe = (ctrl.temporalProductBulk.quantity * ctrl.temporalProductBulk.price);
-            ctrl.temporalProductBulk.importInBulk = isNaN(importe) ? NUMBER_ZERO :  parseFloat(importe).toFixed(NUMBERS_OF_DECIMALS);
+            ctrl.temporalProductBulk.importInBulk = isNaN(importe) ? NUMBER_ZERO :  parseFloat(importe).toFixed(NUMBERS_OF_DECIMALS_BULK);
         };
 
 
@@ -320,7 +320,7 @@
          */
         ctrl.calculateQuantityBulkProduct = function () {
             var quantity = (ctrl.temporalProductBulk.importInBulk/ctrl.temporalProductBulk.price);
-            ctrl.temporalProductBulk.quantity = isNaN(quantity) ? NUMBER_ZERO : parseFloat(quantity).toFixed(2);
+            ctrl.temporalProductBulk.quantity = isNaN(quantity) ? NUMBER_ZERO : parseFloat(quantity).toFixed(NUMBERS_OF_DECIMALS_BULK);
         };
 
         /**

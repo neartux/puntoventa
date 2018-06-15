@@ -222,7 +222,7 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    @{{ product.quantity }}
+                                                    @{{ product.quantity | number: 2 }}
                                                     <i class="icon-login" data-ng-click="ctrl.updateBulkProductQuantities($index);"
                                                        title="Actualiza cantidad"></i>
                                                 </td>
@@ -239,7 +239,7 @@
                                             </tbody>
                                             <tfoot>
                                             <tr class="bold">
-                                                <td colspan="3" rowspan="2">Total de productos: @{{ ctrl.ventaCompleta.totalProducts }}</td>
+                                                <td colspan="3" rowspan="2">Total de productos: @{{ ctrl.ventaCompleta.totalProducts | number: 2 }}</td>
                                                 <td colspan="5" class="text-right">Total Descuento:</td>
                                                 <td class="text-right">@{{ ctrl.ventaCompleta.total_discount | currency }}</td>
                                             </tr>
