@@ -128,12 +128,12 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
+                {{--<li class="nav-item"> TODO comentado ya que no aplica para puntoventa general
                     <a href="{{ route('order_list_view') }}" class="nav-link nav-toggle">
                         <i class="icon-notebook"></i>
                         <span class="title">Pedidos</span>
                     </a>
-                </li>
+                </li>--}}
 
                 <li class="nav-item">
                     <a href="javascript:;" class="nav-link nav-toggle">
