@@ -1,259 +1,192 @@
 (function (){
     var app = angular.module('Product', ['ProductProvider', 'datatables']);
 
-    app.controller('ProductController', function($scope, $http, ProductService, DTOptionsBuilder, DTColumnDefBuilder) {
+    app.controller('ProductController', function($scope, $http, $compile, ProductService, DTOptionsBuilder, DTColumnBuilder) {
         var ctrl = this;
         ctrl.productList = { data: [] };
-        ctrl.unities = [];
-        ctrl.deparments = [];
-        ctrl.adjusmentReasons = [];
-        ctrl.inversionStockTO = {};
-
-        // Configuracion para datatable
+        ctrl.unities = { data: [] };
+        ctrl.deparments = { data: [] };
         ctrl.dtInstance = {};
-        ctrl.dtOptions = DTOptionsBuilder.newOptions().withDOM('C<"clear">lfrtip');
-        ctrl.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0).notSortable(),
-            DTColumnDefBuilder.newColumnDef(2).notSortable(),
-            DTColumnDefBuilder.newColumnDef(3).notSortable(),
-            DTColumnDefBuilder.newColumnDef(4).notSortable(),
-            DTColumnDefBuilder.newColumnDef(5).notSortable(),
-            DTColumnDefBuilder.newColumnDef(6).notSortable()
-        ];
+        ctrl.productTO = {};
+        ctrl.isCreateProduct = true;
+
 
         /**
          * Initialize app, instance context path of app
          * @param contextPath Application path
          */
         ctrl.init = function (contextPath) {
-            startLoading("Cargando productos");
             // Coloca el path del server
             ProductService.contextPath = contextPath;
-
-            ProductService.findAllProducts().then(function(res){
-                ctrl.productList.data = res.data;
-                stopLoading();
-            });
-            ctrl.findInversionStock();
+            // busca todas las unidades disponibles
             ProductService.findAllUnit().then(function(resp){
-                ctrl.unities = resp.data;
+                ctrl.unities.data = resp.data;
             });
-
+            // Busca todos los deparmentos disponibles
             ProductService.findAllDeparments().then(function(resp){
-                ctrl.deparments = resp.data;
-            });
-            ProductService.findAllAjusmentReasons().then(function(res){
-                ctrl.adjusmentReasons = res.data;
-            });
-        };
-
-        ctrl.findInversionStock = function () {
-            ProductService.findInversionStock().then(function (res) {
-                ctrl.inversionStockTO = res.data;
-            });
-        };
-
-        ctrl.showCreateProduct = function () {
-            ctrl.cleanForm();
-            ctrl.product.unit = ctrl.unities[0];
-            ctrl.product.deparment = ctrl.deparments[0];
-            $("#productModal").modal();
-            ctrl.titleFormAction = 'Crear Producto';
-        };
-
-        /**
-         * Valida el form y crea o modifica
-         * @param isFormValid La validacion del form
-         */
-        ctrl.validateProduct = function (isFormValid) {
-            console.info("0")
-            if(isFormValid) {
-                console.info("1")
-                startLoading("Guardando informacion");
-                console.info("2")
-                if(ctrl.product.isNew) {
-                    console.info("3")
-                    ctrl.saveProduct();
-                    console.info("4");
-                } else {
-                    ctrl.updateProduct();
-                }
-                stopLoading();
-            }
-        };
-
-        /**
-         *  Metodo que crea un nuevo departamento
-         */
-        ctrl.saveProduct = function () {
-            console.info("se va");
-            return ProductService.saveProduct(ctrl.product).success(function(response) {
-                console.info("regreso")
-                if (!response.error) {
-                    ctrl.product.id = response.id;
-                    ctrl.productList.data.push(ctrl.product);
-                    showNotification('Mensaje', response.message, 'info');
-                } else {
-                    showNotification('Error', response.message, 'error');
-                }
-                ctrl.cleanForm();
-                $("#productModal").modal("hide");
-            }).error(function(response) {
-                showNotification('Mensaje', 'Ha ocurrido un error, contacte a su administrador', 'error');
-                ctrl.cleanForm();
+                ctrl.deparments.data = resp.data;
             });
         };
 
         /**
-         * Muestra el form para actualizar un departamento
-         * @param index El indice del elemento
-         * @param product El elemento
+         * Crea los iconos del panel del reporte de stock
+         * @param data
+         * @param type
+         * @param full
+         * @param meta
+         * @returns {string} El string con el html de las opciones del panel
          */
-        ctrl.showEditProduct = function (index, product) {
-            ctrl.product = angular.copy(product);
-            ctrl.product.index = index;
-            ctrl.product.deparment = ctrl.filterSelect(ctrl.product.deparment_id,ctrl.deparments);
-            ctrl.product.unit = ctrl.filterSelect(ctrl.product.unit_id,ctrl.unities);
-            ctrl.product.isNew = false;
-            $("#productModal").modal();
-            ctrl.titleFormAction = 'Modificar '+product.description;
-        };
+        function panelActions(data, type, full, meta) {
+            return '<a href="javascript:;" class="btn btn-icon-only green-seagreen" ' +
+                'data-ng-click="ctrl.previewProduct(' + meta.row + ')">' +
+                '<i class="icon-magnifier"></i>' +
+                '</a>' +
+                '<a href="javascript:;" class="btn btn-icon-only blue" ' +
+                'data-ng-click="ctrl.editProduct(' + meta.row + ')">' +
+                '<i class="icon-note"></i>' +
+                '</a>' +
+                '<a href="javascript:;" class="btn btn-icon-only purple"' +
+                'data-ng-click="ctrl.updateStockProduct(' + meta.row + ')">' +
+                '<i class="icon-share-alt"></i>' +
+                '</a>' +
+                '<a href="javascript:;" class="btn btn-icon-only red" ' +
+                'data-ng-click="ctrl.deleteProduct(' + meta.row + ')">' +
+                '<i class="icon-trash"></i>' +
+                '</a>';
+        }
 
         /**
-         * Metodo para actualizar un departamento existente
+         * Sobreescribe algunos campos de la tabla de productos
+         * @param row La fila
+         * @param data El elemento
+         * @param dataIndex El index
          */
-        ctrl.updateProduct = function () {
-            return ProductService.updateProduct(ctrl.product).success(function(response) {
-                if (!response.error) {
-                    ctrl.productList.data[ctrl.product.index] = angular.copy(ctrl.product);
-                    showNotification('Mensaje', response.message, 'info');
-                } else {
-                    showNotification('Error', response.message, 'error');
-                }
-                ctrl.cleanForm();
-                $("#productModal").modal("hide");
-                stopLoading();
-            }).error(function(response) {
-                showNotification('Mensaje', 'Ha ocurrido un error, contacte a su administrador', 'error');
-                ctrl.cleanForm();
-                stopLoading();
-            });
-        };
+        function createdRow(row, data, dataIndex) {
+            $(row.getElementsByTagName("TD")[2]).html('{{ ' + data.purchase_price + ' | currency }}');
+            $(row.getElementsByTagName("TD")[3]).html('{{ ' + data.sale_price + ' | currency }}');
+            var clas = data.current_stock <= data.minimum_stock ? 'font-red' : 'font-blue';
+            $(row.getElementsByTagName("TD")[4]).html('' +
+                '<span class="'+clas+' bold">' +
+                '{{'+data.current_stock+'}}' +
+                '</span>');
+            // Recompiling so we can bind Angular directive to the DT
+            $compile(angular.element(row).contents())($scope);
+        }
 
-        /**
-         * Elimina un producto por su id
-         * @param index El indice para remover de la lista
-         * @param id El id del elemento para eliminar
-         */
-        ctrl.deleteProduct = function (index, id) {
-            swal({
-                    title: "Confirmación",
-                    text: "¿Estas seguro de eliminar el producto?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Si, Eliminar!",
-                    cancelButtonText: "Cancelar",
-                    closeOnConfirm: true
-                },
-                function(){
-                stopLoading("Eliminando Producto");
-                    ProductService.deleteProduct(id).success(function (response) {
-                        if(!response.error) {
-                            ctrl.productList.data.splice(index, 1);
-                            showNotification('Mensaje', response.message, 'info');
-                            setTimeout(function () {
-                                $scope.$apply();
-                            },400);
-                        } else {
-                            showNotification('Error', response.message, 'error');
-                        }
-                        stopLoading();
-                    }).error(function () {
-                        showNotification('Error', 'Ocurrio un error, favor contacte al administrador', 'error');
-                        stopLoading();
-                    });
-                });
-        };
-
-        ctrl.showEditStock = function(index,product){
-            ctrl.product = angular.copy(product);
-            ctrl.product.index = index;
-            // ctrl.product.adjusmentReason = ctrl.filterSelect(3,ctrl.adjusmentReasons);
-            ctrl.titleFormAction = 'Stock';
-            $("#stockModal").modal();
-        };
-
-        ctrl.validateStock = function (isFormValid) {
-            if(isFormValid) {
-                ctrl.updateStock();
-            }
-        };
-
-        ctrl.updateStock = function(){
-            startLoading("Actualizando inventario");
-            ProductService.updateStock(ctrl.product).then(function(response){
-                if (!response.error) {
-                    var idx = ctrl.idxCollection(ctrl.productList.data,ctrl.product.id);
-                    if(idx!==false){
-                        ctrl.productList.data[idx].current_stock = response.stock;
+        ctrl.dtOptions = {
+            DOM: 'lfrtip',
+            displayLength: 10,
+            processing: true,
+            serverSide: true,
+            source: ProductService.getContextPath() + '/admin/stock/findAllProductStock',
+            dataProp: 'data',
+            paginationType: 'full_numbers',
+            fnServerData: function (sSource, aoData, fnCallback, oSettings) {
+                $http({
+                    method: 'POST',
+                    url: ProductService.getContextPath() + '/admin/stock/findAllProductStock',
+                    data: {
+                        start: aoData[3].value,
+                        length: aoData[4].value,
+                        draw: aoData[0].value,
+                        order: aoData[2].value,
+                        search: aoData[5].value,
+                        columns: aoData[1].value
+                    },
+                    headers: {
+                        'Content-type': 'application/json'
                     }
-                    showNotification('Mensaje', response.message, 'info');
-                    ctrl.findInversionStock();
-                } else {
-                    showNotification('Error', response.message, 'error');
+                })
+                    .then(function (result) {
+                        fnCallback(result.data);
+                        ctrl.productList.data = result.data.data;
+                    }, function () {
+                    });
+            },
+            fnServerParams: function (aoData) {
+            },
+            createdRow: createdRow,
+            paginate: true,
+            pagining: true,
+            paging: true,
+            language: {
+                processing: "Procesando...",
+                search: "Buscar:",
+                lengthMenu: "Mostrar _MENU_ Elementos",
+                info: "Mostrando del _START_ al _END_ de _TOTAL_ productos",
+                infoEmpty: "No se encontraron productos.",
+                infoFiltered: "(filtrado _MAX_ elementos total)",
+                infoPostFix: "",
+                loadingRecords: "Cargando productos...",
+                zeroRecords: "No se encontraron productos",
+                emptyTable: "No hay productos disponibles en la tabla",
+                paginate: {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Último"
                 }
-                ctrl.cleanForm();
-                $("#stockModal").modal("hide");
-                stopLoading();
-            }).catch(function(response){
-                showNotification('Mensaje', 'Ha ocurrido un error, contacte a su administrador', 'error');
-                ctrl.cleanForm();
-                stopLoading();
-            });
+            }
         };
 
-        ctrl.idxCollection = function($array,$id){
-            var $res = _.filter($array,{'id':$id});
+        ctrl.dtColumns = [
+            DTColumnBuilder.newColumn('code').withTitle('Código').withClass('pr-xs pl-xs pb-xs pt-xs').withOption('width', '5%').notSortable(),
+            DTColumnBuilder.newColumn('description').withTitle('Producto').withClass('pr-xs pl-xs pb-xs pt-xs').withOption('width', '40%').notSortable(),
+            DTColumnBuilder.newColumn('purchase_price').withTitle('Precio Compra').withClass('text-right pr-xs pl-xs pb-xs pt-xs').withOption('width', '10%').notSortable(),
+            DTColumnBuilder.newColumn('sale_price').withTitle('Precio Venta').withClass('text-right pr-xs pl-xs pb-xs pt-xs').withOption('width', '10%').notSortable(),
+            DTColumnBuilder.newColumn('current_stock').withTitle('Stock').withClass('text-center pr-xs pl-xs pb-xs pt-xs').withOption('width', '10%').notSortable(),
+            DTColumnBuilder.newColumn(null).withTitle('Panel').withClass('pr-xs pl-xs pb-xs pt-xs').withOption('width', '25%').renderWith(panelActions).notSortable()
+        ];
 
-            if($res.length>0){
-                var $idx = $array.indexOf($res[0]);
-                return $idx;
+        ctrl.viewCreateProduct = function () {
+            ctrl.productTO = {};
+            ctrl.titleFormAction = 'Crear Producto';
+            $("#dataProduct").modal();
+        };
+
+        /**
+         * Visualizacion previa de un producto en especifico
+         *
+         * @param index El index del producto en la lista
+         */
+        ctrl.previewProduct = function (index) {
+            ctrl.productTO = ctrl.productList.data[index];
+            $("#previewProduct").modal();
+        };
+
+        ctrl.validateProduct = function (isValid) {
+            if(isValid) {
+                if(ctrl.isCreateProduct) {
+                    ctrl.validateCreateProduct();
+                }
             }
-            return false;
-        }
-        
-        /**
-         * Encuentra un item de un select
-         * @param id El id del elemento
-         * @param array Coleccion a encontrar
-         */
-        ctrl.filterSelect = function($id,$array){
-            var idx = _.filter($array,{'id':$id});
-            // console.info("idx",idx);
-            return idx[0];
-        }
+        };
 
-        /**
-         * Limpia el form del departamento
-         */
-        ctrl.cleanForm = function () {
-            ctrl.product = {
-                id: 0,
-                description: '',
-                unit_id:0,
-                deparment_id:0,
-                code:'',
-                purchase_price:0,
-                sale_price:0,
-                wholesale_price:0,
-                current_stock:0,
-                minimum_stock:0,
-                index: undefined,
-                isNew: true,
-                adjusmentReason: []
-            };
-            $scope.productForm.$setPristine();
+        ctrl.validateCreateProduct = function () {
+            console.info("ctrl.productTO = ", ctrl.productTO);
+            if(!ctrl.productTO.current_stock.length) {
+                showNotification("Info", "El inventario actual es requerido", "info");
+                return;
+            }
+            // TODO hay que validar que no exista el codigo en BD
+        };
+
+        ctrl.editProduct = function (index) {
+            ctrl.isCreateProduct = false;
+            var product = ctrl.productList.data[index];
+            ctrl.productTO = angular.copy(product);
+            ctrl.productTO.deparment_id = ''+product.deparment_id;
+            ctrl.productTO.unit_id = ''+product.deparment_id;
+            ctrl.titleFormAction = 'Editar producto ' + product.description;
+            $("#dataProduct").modal();
+        };
+
+        ctrl.updateStockProduct = function (index) {
+            alert(index);
+        };
+
+        ctrl.deleteProduct = function (index) {
+
         };
 
     });

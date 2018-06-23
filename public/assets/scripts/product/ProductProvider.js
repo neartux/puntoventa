@@ -6,6 +6,10 @@
 
         service.contextPath = '';
 
+        service.getContextPath = function () {
+            return service.contextPath;
+        };
+
         service.findAllProducts = function () {
             return $http.get(service.contextPath + '/admin/product/findAllProducts');
         };

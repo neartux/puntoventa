@@ -105,7 +105,11 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
     Route::post('/product/delete','ProductController@delete');
 
     Route::post('/product/updateStock','ProductController@returnProductToStock');
-    
+
+    Route::get('/stock/list', 'ProductController@stockList')->name('admin_stock_list');
+
+    Route::post('/stock/findAllProductStock', 'ProductController@findAllProductStock');
+
     Route::get('/configuration/downloadBackupDataBase', 'ConfigurationController@downloadBackupDataBase')->name('download_bakcup_database');
 
     Route::get('/order/addProductToOrder/{productId}', 'OrderController@addProductToOrder');

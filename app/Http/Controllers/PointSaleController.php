@@ -7,6 +7,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Repository\client\ClientInterface;
 use App\Repository\Product\ProductInterface;
 use App\Repository\sale\SaleInterface;
 use Illuminate\Http\Request;
@@ -17,16 +18,18 @@ class PointSaleController extends Controller {
 
     private $product;
     private $sale;
+    private $client;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(ProductInterface $product, SaleInterface $sale) {
+    public function __construct(ProductInterface $product, SaleInterface $sale, ClientInterface $client) {
         $this->middleware('auth');
         $this->product = $product;
         $this->sale = $sale;
+        $this->client = $client;
     }
 
     public function display() {
@@ -51,7 +54,7 @@ class PointSaleController extends Controller {
     }
 
     public function findClientById($clientId) {
-        return response()->json($this->product->findClientById($clientId));
+        return response()->json($this->client->findClientById($clientId));
     }
 
     public function findProductsByCodeOrName(Request $request) {
@@ -59,7 +62,7 @@ class PointSaleController extends Controller {
     }
 
     public function findClientByNameOrLastName(Request $request) {
-        return response()->json($this->product->findClientByNameOrLastName($request->input('q')));
+        return response()->json($this->client->findClientByNameOrLastName($request->input('q')));
     }
 
     public function createSale(Request $request) {

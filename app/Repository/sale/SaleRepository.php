@@ -226,7 +226,7 @@ class SaleRepository implements SaleInterface {
 
         // Genera el movimiento de caja
         $this->createMovementCaja(ApplicationKeys::MOVEMENT_TYPE_SALIDA, ApplicationKeys::REASON_WITHDRAWAL_SALE_CANCELLATION, $sale->id,
-            $sale->total, '', '');
+            $sale->total, 'Sale Cancelled', '');
         // Resta el monto a la caja
         $this->subtractAmountToCaja($sale->total);
         // Regresa el producto al inventario

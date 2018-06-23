@@ -87,4 +87,18 @@ class ClientRepository implements ClientInterface {
         $client->save();
     }
 
+    public function findClientById($clientId) {
+        return $this->client->findById($clientId);
+    }
+
+    public function findClientByNameOrLastName($re) {
+        return DB::select('
+        SELECT clients.id,personal_data.name,personal_data.last_name
+        FROM clients
+        INNER JOIN personal_data ON clients.personal_data_id = personal_data.id
+        WHERE clients.status_id = '.StatusKeys::STATUS_ACTIVE.'
+        AND clients.id != '.ApplicationKeys::CLIENT_GENERAL_PUBLIC.'
+        AND (name LIKE \'%'.$re.'%\' OR last_name LIKE \'%'.$re.'%\')');
+    }
+
 }

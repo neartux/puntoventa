@@ -141,7 +141,7 @@
                                                 class="col-md-12 control-label bold">Código</label>
                                             <br>
                                             <div class="col-md-12">
-                                                <input type="text" name="code" data-ng-model="ctrl.product.code"
+                                                <input type="text" name="code" data-ng-model="ctrl.productTO.code"
                                                     class="form-control" required id="codeProduct" maxlength="50">
                                                 <span ng-show="productForm.code.$invalid && !productForm.code.$pristine"
                                                     class="help-block">El código es requerido.</span>

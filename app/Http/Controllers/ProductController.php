@@ -12,6 +12,7 @@ use App\Repository\Product\ProductInterface;
 use App\Utils\Keys\common\NumberKeys;
 use App\Utils\Keys\common\StatusKeys;
 use App\Utils\Keys\common\ApplicationKeys;
+use App\Utils\product\ProductUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +30,21 @@ class ProductController extends Controller {
 
     public function productList() {
         return view('/admin/product/productList');
+    }
+
+    public function stockList() {
+        return view('/admin/product/stockList');
+    }
+
+    public function findAllProductStock(Request $request){
+        // Convierte a objeto los parametros
+        $requestDT = ProductUtils::getRequestDataTable($request);
+        // Obtiene los elementos
+        $products = $this->product->findProducts($requestDT->getLength(), $requestDT->getStart(), $requestDT->getSearch()['value']);
+        // Obtiene la longitud de la consulta
+        $length = $this->product->countProducts($requestDT->getSearch()['value']);
+        // Devuelve el resultado esperado por el datatable
+        return response()->json(array("draw" => $requestDT->getDraw(), "recordsFiltered" => $length, "recordsTotal" => $length, "data" => $products));
     }
 
     public function findAllUnit(){

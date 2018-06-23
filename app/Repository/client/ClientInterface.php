@@ -18,4 +18,8 @@ interface ClientInterface {
 
     public function deleteClient($id);
 
+    public function findClientById($clientId);
+
+    public function findClientByNameOrLastName($re);
+
 }

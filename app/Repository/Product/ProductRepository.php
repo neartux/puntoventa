@@ -48,20 +48,6 @@ class ProductRepository implements ProductInterface {
         return DB::select('SELECT * FROM products WHERE status_id = '.StatusKeys::STATUS_ACTIVE.' AND (code LIKE \'%'.$re.'%\' OR description LIKE \'%'.$re.'%\')');
     }
 
-    public function findClientById($clientId) { // TODO este metodo pasar el repository de cliente, cuando se cree
-        return $this->client->findById($clientId);
-    }
-
-    public function findClientByNameOrLastName($re) { // TODO este metodo pasar el repository de cliente, cuando se cree
-        return DB::select('
-        SELECT clients.id,personal_data.name,personal_data.last_name
-        FROM clients
-        INNER JOIN personal_data ON clients.personal_data_id = personal_data.id
-        WHERE clients.status_id = '.StatusKeys::STATUS_ACTIVE.'
-        AND clients.id != '.ApplicationKeys::CLIENT_GENERAL_PUBLIC.'
-        AND (name LIKE \'%'.$re.'%\' OR last_name LIKE \'%'.$re.'%\')');
-    }
-
     public function updateStockByIdProduct($productId, $quantity, $isAdd,$return = FALSE) {
         $product = $this->product->findById($productId);
         // Determina si es suma o resta
@@ -93,12 +79,32 @@ class ProductRepository implements ProductInterface {
         }
         $adjustment->save();
     }
+
     public function findAllUnit(){
         return DB::select('SELECT * FROM unities WHERE status_id = '.StatusKeys::STATUS_ACTIVE);
     }
+
     public function findAllProducts() {
         return $this->product->findAll();
     }
+
+    public function findProducts($length, $start, $search){
+        $sql = 'SELECT products.*,deparments.description AS department,unities.description AS unit FROM products LEFT JOIN deparments ON products.deparment_id = deparments.id LEFT JOIN unities ON products.unit_id = unities.id WHERE products.status_id = '.StatusKeys::STATUS_ACTIVE;
+        if(!is_null($search) && !empty($search)) {
+            $sql.=' AND(upper(products.code) LIKE upper(\'%'.$search.'%\') OR upper(products.description) LIKE upper(\'%'.$search.'%\') OR products.sale_price LIKE \'%'.$search.'%\')';
+        }
+        $sql .=' ORDER BY products.description LIMIT '.$length.' OFFSET '.$start;
+        return DB::select($sql);
+    }
+
+    public function countProducts($search) {
+        $sql = 'SELECT count(*) AS length FROM products WHERE products.status_id = '.StatusKeys::STATUS_ACTIVE;
+        if(!is_null($search) && !empty($search)) {
+            $sql.=' AND(upper(code) LIKE upper(\'%'.$search.'%\') OR upper(description) LIKE upper(\'%'.$search.'%\') OR sale_price LIKE \'%'.$search.'%\')';
+        }
+        return DB::selectOne($sql)->length;
+    }
+
     public function findAllAjusmentReasons(){
         return DB::select('SELECT * FROM adjustment_reasons WHERE status_id = '.StatusKeys::STATUS_ACTIVE.' AND id not in (1,2)');
     }

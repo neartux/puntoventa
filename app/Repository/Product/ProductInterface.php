@@ -16,10 +16,6 @@ interface ProductInterface {
 
     public function findProductByCodeOrDescription($re);
 
-    public function findClientById($clientId);
-
-    public function findClientByNameOrLastName($re);
-
     public function updateStockByIdProduct($productId, $quantity, $isAdd);
 
     public function createAdjustment($userId, $adjustmentReasonId, $productId, $saleId, $quantity, $comments);
@@ -27,6 +23,10 @@ interface ProductInterface {
     public function findAllUnit();
 
     public function findAllProducts();
+
+    public function findProducts($length, $start, $search);
+
+    public function countProducts($search);
     
     public function findAllAjusmentReasons();
 
