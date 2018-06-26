@@ -9,6 +9,7 @@
         ctrl.adjusmentReasons = { data: [] };
         ctrl.dtInstance = {};
         ctrl.productTO = {};
+        ctrl.inversionStockTO = {};
         ctrl.isCreateProduct = true;
 
 
@@ -30,6 +31,17 @@
             // Busca las rasones de ajuste
             ProductService.findAllAjusmentReasons().then(function(res){
                 ctrl.adjusmentReasons.data = res.data;
+            });
+            // Busca las inversiones del inventario
+            ctrl.findInversionStock();
+        };
+
+        /**
+         * Busca las inversiones del inventario
+         */
+        ctrl.findInversionStock = function () {
+            ProductService.findInversionStock().then(function (res) {
+                ctrl.inversionStockTO = res.data;
             });
         };
 
@@ -173,7 +185,7 @@
             // Si el producto es valido
             if(isValid) {
                 // Valida el codigo del producto si es disponible
-                ProductService.findInversionStock(ctrl.productTO.id, $.trim(ctrl.productTO.code).toUpperCase()).then(function (res) {
+                ProductService.existProductByCode(ctrl.productTO.id, $.trim(ctrl.productTO.code).toUpperCase()).then(function (res) {
                     // Si el codigo es valido
                     if(parseInt(res.data.exist) === 0) {
                         // Si es crear producto

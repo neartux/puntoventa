@@ -116,7 +116,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin_product_list') }}" class="nav-link nav-toggle">
+                    <a href="{{ route('admin_stock_list') }}" class="nav-link nav-toggle">
                         <i class="fa fa-cube"></i>
                         <span class="title">Inventario</span>
                     </a>
