@@ -32,4 +32,6 @@ interface ProductInterface {
 
     public function findInversionStock();
 
+    public function existProductByCode($id, $code);
+
 }

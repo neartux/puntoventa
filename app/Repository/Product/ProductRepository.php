@@ -112,4 +112,8 @@ class ProductRepository implements ProductInterface {
     public function findInversionStock() {
         return DB::selectOne('SELECT sum(current_stock) as productos,sum(products.purchase_price * products.current_stock) as total FROM products WHERE current_stock > 0');
     }
+
+    public function existProductByCode($id, $code) {
+        return DB::selectOne('SELECT count(*) > 0 exist FROM products WHERE id != '.$id.' AND status_id = 1 AND UPPER(code) = \''.$code.'\'')->exist;
+    }
 }

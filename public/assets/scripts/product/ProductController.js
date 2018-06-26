@@ -50,7 +50,7 @@
                 '<i class="icon-share-alt"></i>' +
                 '</a>' +
                 '<a href="javascript:;" class="btn btn-icon-only red" ' +
-                'data-ng-click="ctrl.deleteProduct(' + meta.row + ')">' +
+                'data-ng-click="ctrl.deleteProduct(' + data.id + ')">' +
                 '<i class="icon-trash"></i>' +
                 '</a>';
         }
@@ -140,6 +140,8 @@
 
         ctrl.viewCreateProduct = function () {
             ctrl.productTO = {};
+            ctrl.productTO.id = 0;
+            ctrl.isCreateProduct = true;
             ctrl.titleFormAction = 'Crear Producto';
             $("#dataProduct").modal();
         };
@@ -155,20 +157,45 @@
         };
 
         ctrl.validateProduct = function (isValid) {
+            // Si el producto es valido
             if(isValid) {
-                if(ctrl.isCreateProduct) {
-                    ctrl.validateCreateProduct();
-                }
+                // Valida el codigo del producto si es disponible
+                ProductService.findInversionStock(ctrl.productTO.id, $.trim(ctrl.productTO.code).toUpperCase()).then(function (res) {
+                    // Si el codigo es valido
+                    if(parseInt(res.data.exist) === 0) {
+                        // Si es crear producto
+                        if(ctrl.isCreateProduct) {
+                            ctrl.validateCreateProduct();
+                        }
+                        // Si es modificar un producto
+                        else {
+                            ctrl.validateUpdateProduct();
+                        }
+                    }
+                    else {
+                        showNotification("Info", "El codigo "+ctrl.productTO.code+" no esta disponible", "info");
+                    }
+                });
             }
         };
 
         ctrl.validateCreateProduct = function () {
-            console.info("ctrl.productTO = ", ctrl.productTO);
+            // Valida que tenga stock
             if(!ctrl.productTO.current_stock.length) {
                 showNotification("Info", "El inventario actual es requerido", "info");
                 return;
             }
-            // TODO hay que validar que no exista el codigo en BD
+            // Crea el producto
+            ProductService.saveProduct(ctrl.productTO).then(function (res) {
+                if(!res.data.error) {
+                    $("#dataProduct").modal("hide");
+                    ctrl.dtInstance.rerender();
+                    showNotification("Success", res.data.message, "success");
+                }
+                else {
+                    showNotification("Error", res.data.message, "error");
+                }
+            });
         };
 
         ctrl.editProduct = function (index) {
@@ -181,12 +208,50 @@
             $("#dataProduct").modal();
         };
 
+        ctrl.validateUpdateProduct = function () {
+            // Crea el producto
+            ProductService.updateProduct(ctrl.productTO).then(function (res) {
+                if(!res.data.error) {
+                    $("#dataProduct").modal("hide");
+                    ctrl.dtInstance.rerender();
+                    showNotification("Success", res.data.message, "success");
+                }
+                else {
+                    showNotification("Error", res.data.message, "error");
+                }
+            });
+        };
+
         ctrl.updateStockProduct = function (index) {
             alert(index);
         };
 
-        ctrl.deleteProduct = function (index) {
-
+        ctrl.deleteProduct = function (id) {
+            swal({
+                    title: "Confirmación",
+                    text: "¿Estas seguro de eliminar el producto?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Si, Eliminar!",
+                    cancelButtonText: "Cancelar",
+                    closeOnConfirm: true
+                },
+                function(){
+                    startLoading("Eliminando producto");
+                    ProductService.deleteProduct(id).success(function (response) {
+                        if(!response.error) {
+                            ctrl.dtInstance.rerender();
+                            showNotification('Success', response.message, 'success');
+                        } else {
+                            showNotification('Error', response.message, 'error');
+                        }
+                        stopLoading();
+                    }).error(function () {
+                        showNotification('Error', 'Ocurrio un error, favor contacte al administrador', 'error');
+                        stopLoading();
+                    });
+                });
         };
 
     });

@@ -47,6 +47,10 @@ class ProductController extends Controller {
         return response()->json(array("draw" => $requestDT->getDraw(), "recordsFiltered" => $length, "recordsTotal" => $length, "data" => $products));
     }
 
+    public function existProductByCode($id, $code) {
+        return response()->json(array("exist" => $this->product->existProductByCode($id, $code)));
+    }
+
     public function findAllUnit(){
         $unities = $this->product->findAllUnit();
         return response()->json($unities);
@@ -67,6 +71,7 @@ class ProductController extends Controller {
         $adjusmentReasons = $this->product->findAllAjusmentReasons();
         return response()->json($adjusmentReasons);
     }
+
     public function save(Request $request){
 
         try {
@@ -74,8 +79,8 @@ class ProductController extends Controller {
             $product_->status_id = StatusKeys::STATUS_ACTIVE;
             $product_->description = $request->input('description');
             $product_->code= $request->input('code');
-            $product_->deparment_id = $request->input('deparment')['id'];
-            $product_->unit_id = $request->input('unit')['id'];
+            $product_->deparment_id = $request->input('deparment_id');
+            $product_->unit_id = $request->input('unit_id');
             $product_->purchase_price = $request->input('purchase_price');
             $product_->sale_price = $request->input('sale_price');
             $product_->wholesale_price = $request->input('wholesale_price');
@@ -96,8 +101,8 @@ class ProductController extends Controller {
             $product_ = Product::findOrFail($request->input('id'));
             $product_->description = $request->input('description');
             $product_->code= $request->input('code');
-            $product_->deparment_id = $request->input('deparment')['id'];
-            $product_->unit_id = $request->input('unit')['id'];
+            $product_->deparment_id = $request->input('deparment_id');
+            $product_->unit_id = $request->input('unit_id');
             $product_->purchase_price = $request->input('purchase_price');
             $product_->sale_price = $request->input('sale_price');
             $product_->wholesale_price = $request->input('wholesale_price');

@@ -67,6 +67,10 @@
             });
         };
 
+        service.findInversionStock = function (id, code) {
+            return $http.get(service.contextPath + '/admin/product/existProductByCode/'+id+'/'+code);
+        };
+
         return service;
 
     });

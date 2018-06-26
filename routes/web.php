@@ -98,6 +98,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
     
     Route::get('/product/findAllAjusmentReasons','ProductController@findAllAjusmentReasons');
 
+    Route::get('/product/existProductByCode/{id}/{code}', 'ProductController@existProductByCode');
+
     Route::post('/product/save','ProductController@save');
 
     Route::post('/product/update','ProductController@update');

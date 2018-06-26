@@ -22,7 +22,7 @@
                                     <h5 class="mb-xs">Código *</h5>
                                     <span class="font-blue-madison bold input-icon">
                                         <i class="fa fa-barcode"></i>
-                                            <input type="text" name="code" data-ng-model="ctrl.productTO.code"
+                                            <input type="text" name="code" data-ng-model="ctrl.productTO.code" minlength="2"
                                                    class="form-control input-small" required maxlength="50" id="productCode">
                                         <span ng-show="productForm.code.$invalid && !productForm.code.$pristine"
                                               class="help-block font-size11">El código es requerido</span>
@@ -86,7 +86,7 @@
                             <hr class="mt-n mb-n">
                         </div>
 
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 pr-n pl-n">
                             <div class="col-sm-6 pr-n pl-n">
                                 <div class="form-group mb-n" ng-class="{ 'has-error' : productForm.purchase_price.$invalid && !productForm.purchase_price.$pristine }">
                                 <h5 class="mb-xs">Precio Compra *</h5>
@@ -114,7 +114,7 @@
                             </div>
 
                         </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 pr-n pl-n">
                             <div class="col-sm-6 pr-n pl-n">
                                 <div class="form-group mb-n" ng-class="{ 'has-error' : productForm.wholesale_price.$invalid && !productForm.wholesale_price.$pristine }">
                                 <h5 class="mb-xs">Precio Mayoreo *</h5>
@@ -134,9 +134,9 @@
                             <hr class="mt-n mb-n">
                         </div>
 
-                        <div class="col-sm-12">
-                            <div class="col-sm-6 pr-n">
-                                <div class="form-group mb-n" ng-class="{ 'has-error' : productForm.minimum_stock.$invalid && !productForm.minimum_stock.$pristine }">
+                        <div class="col-sm-12 pr-n pl-n">
+                            <div class="col-sm-6 pr-n pl-n">
+                                <div class="form-group" ng-class="{ 'has-error' : productForm.minimum_stock.$invalid && !productForm.minimum_stock.$pristine }">
                                 <h5 class="mb-xs">Mínimo en Inventario *</h5>
                                 <span class="font-grey-mint bold input-icon">
                                     <i class="fa fa-inbox"></i>
@@ -147,8 +147,8 @@
                                         </span>
                                 </div>
                             </div>
-                            <div class="col-sm-6 pr-n pl-n" data-ng-show="ctrl.isCreateProduct">
-                                <div class="form-group mb-n">
+                            <div class="col-sm-6" data-ng-show="ctrl.isCreateProduct">
+                                <div class="form-group">
                                     <h5 class="mb-xs">Inventario Actual *</h5>
                                     <span class="font-grey-mint bold input-icon">
                                     <i class="icon-home"></i>
