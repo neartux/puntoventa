@@ -23,15 +23,15 @@ class AdjustmentReasonTableSeeder extends Seeder {
         ];
 
         $AEP = [
-            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_PRODUCT_ENTRY, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Entrada de producto', 'abbreviation' => 'AEP']
+            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_PRODUCT_ENTRY, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Entrada de producto', 'abbreviation' => 'AEP', 'sign' => '+']
         ];
 
         $ASP = [
-            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_PRODUCT_OUTPUT, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Salida de producto', 'abbreviation' => 'ASP']
+            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_PRODUCT_OUTPUT, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Salida de producto', 'abbreviation' => 'ASP', 'sign' => '-']
         ];
 
         $APD = [
-            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_DAMAGED_PRODUCT, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Producto Dañado', 'abbreviation' => 'APD']
+            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_DAMAGED_PRODUCT, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Producto Dañado', 'abbreviation' => 'APD', 'sign' => '-']
         ];
 
         DB::table('adjustment_reasons')->insert($adjustment_sale);

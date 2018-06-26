@@ -128,6 +128,24 @@ class ProductController extends Controller {
         }
     }
 
+    public function updateStockProduct(Request $request) {
+        try{
+            $productId = $request->input('productId');
+            $quantity = $request->input('quantity');
+            $adjusmentReasonId = $request->input('adjusmentReasonId');
+            $userId = Auth::user()->id;
+            // Crea el ajuste para mantener un historial
+            $this->product->createAdjustment($userId, $adjusmentReasonId, $productId, null, $quantity, 'Ajuste de stock');
+            // Ajusta el stock
+            $this->product->updateStockProduct($productId, $quantity, $adjusmentReasonId);
+
+            return response()->json(array("error" => false, "id", "message" => "El stock se ha actualizado"));
+
+        }catch(\Exception $e){
+            return response()->json(array("error" => true, "message" => $e->getMessage()));
+        }
+    }
+
     public function updateStock(Request $request) {
         try {
             $product_ = Product::findOrFail($request->input('id'));
@@ -167,7 +185,7 @@ class ProductController extends Controller {
             }
             // $product_ = new Product();
             $userId = Auth::user()->id;;
-            $this->product->createAdjustment($userId, $idAdjusmentReason,$idProduct, 0, $current_stock, '');
+            $this->product->createAdjustment($userId, $idAdjusmentReason, $idProduct, null, $current_stock, 'Ajuste de stock');
             // Ajusta el stock
             $current_stock_ = $this->product->updateStockByIdProduct($idProduct, $current_stock, $changeStock,true);
 

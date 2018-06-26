@@ -6,6 +6,7 @@
         ctrl.productList = { data: [] };
         ctrl.unities = { data: [] };
         ctrl.deparments = { data: [] };
+        ctrl.adjusmentReasons = { data: [] };
         ctrl.dtInstance = {};
         ctrl.productTO = {};
         ctrl.isCreateProduct = true;
@@ -25,6 +26,10 @@
             // Busca todos los deparmentos disponibles
             ProductService.findAllDeparments().then(function(resp){
                 ctrl.deparments.data = resp.data;
+            });
+            // Busca las rasones de ajuste
+            ProductService.findAllAjusmentReasons().then(function(res){
+                ctrl.adjusmentReasons.data = res.data;
             });
         };
 
@@ -138,6 +143,9 @@
             DTColumnBuilder.newColumn(null).withTitle('Panel').withClass('pr-xs pl-xs pb-xs pt-xs').withOption('width', '25%').renderWith(panelActions).notSortable()
         ];
 
+        /**
+         * Despliega la vista para crear un nuevo producto
+         */
         ctrl.viewCreateProduct = function () {
             ctrl.productTO = {};
             ctrl.productTO.id = 0;
@@ -156,6 +164,11 @@
             $("#previewProduct").modal();
         };
 
+        /**
+         * Valida creacion o modificacion de un producto
+         *
+         * @param isValid Verifica si es valido
+         */
         ctrl.validateProduct = function (isValid) {
             // Si el producto es valido
             if(isValid) {
@@ -179,6 +192,9 @@
             }
         };
 
+        /**
+         * Valida los campos para crear un nuevo producto
+         */
         ctrl.validateCreateProduct = function () {
             // Valida que tenga stock
             if(!ctrl.productTO.current_stock.length) {
@@ -198,6 +214,11 @@
             });
         };
 
+        /**
+         * Muestra la informacion para editar un producto
+         *
+         * @param index El index de la lista del producto
+         */
         ctrl.editProduct = function (index) {
             ctrl.isCreateProduct = false;
             var product = ctrl.productList.data[index];
@@ -208,6 +229,9 @@
             $("#dataProduct").modal();
         };
 
+        /**
+         * Metodo para validar campos al actualiza un producto
+         */
         ctrl.validateUpdateProduct = function () {
             // Crea el producto
             ProductService.updateProduct(ctrl.productTO).then(function (res) {
@@ -215,17 +239,110 @@
                     $("#dataProduct").modal("hide");
                     ctrl.dtInstance.rerender();
                     showNotification("Success", res.data.message, "success");
-                }
-                else {
+                } else {
                     showNotification("Error", res.data.message, "error");
                 }
             });
         };
 
+        /**
+         * Muestra inofrmacion para actualizar el stock
+         *
+         * @param index El index del producto a actualizar
+         */
         ctrl.updateStockProduct = function (index) {
-            alert(index);
+            var product = ctrl.productList.data[index];
+            ctrl.productTO = angular.copy(product);
+            ctrl.productTO.quantity_adjust = 0;
+            ctrl.productTO.newQuantityStock = product.current_stock;
+            $("#previewStockProduct").modal();
         };
 
+        ctrl.applyAdjustProduct = function () {
+            if(ctrl.productTO.adjusmentReason === undefined) {
+                showNotification("Alerta", "Selecciona una razon de ajuste", "warning");
+                return;
+            }
+            if(parseFloat(ctrl.productTO.quantity_adjust) <= 0) {
+                showNotification("Alerta", "La cantidad de ajuste es requerido", "warning");
+                return;
+            }
+            swal({
+                    title: "Confirmación",
+                    text: "¿Estas seguro de ajustar el inventario?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Si, Ajustar!",
+                    cancelButtonText: "Cancelar",
+                    closeOnConfirm: true
+                },
+                function(apply){
+                if(apply) {
+                    startLoading("Ajustando stock de producto");
+                    // Ajusta el stock
+                    ProductService.updateStock(ctrl.productTO.id, parseFloat(ctrl.productTO.quantity_adjust), ctrl.productTO.adjusmentReason.id).then(function (res) {
+                        if(!res.error) {
+                            $("#previewStockProduct").modal("hide");
+                            ctrl.dtInstance.rerender();
+                            showNotification("Success", res.message, "success");
+                        } else {
+                            showNotification("Error", res.message, "error");
+                        }
+                        stopLoading();
+                    });
+                }
+
+            });
+        };
+
+        /**
+         * Calcula la nueva cantidad de stock
+         */
+        ctrl.calculateNewQuantityStock = function () {
+            if(ctrl.productTO.adjusmentReason === undefined) {
+                showNotification("Info", "Selecciona una razon de ajuste", "info");
+                return;
+            }
+            var sign = ctrl.getSignReason(ctrl.productTO.adjusmentReason);
+            if(sign === 1) {
+                ctrl.productTO.newQuantityStock = (parseFloat(ctrl.productTO.current_stock) + parseFloat(ctrl.productTO.quantity_adjust));
+            }
+            else {
+                ctrl.productTO.newQuantityStock = (parseFloat(ctrl.productTO.current_stock) - parseFloat(ctrl.productTO.quantity_adjust));
+            }
+        };
+
+        /**
+         * Valida que opcion de ajuste esta seleccionada
+         */
+        ctrl.selectReasonAdjustment = function () {
+            if(ctrl.productTO.adjusmentReason !== undefined) {
+                ctrl.calculateNewQuantityStock();
+            }
+            else {
+                ctrl.productTO.newQuantityStock = ctrl.productTO.current_stock;
+                ctrl.productTO.quantity_adjust = 0;
+            }
+        };
+
+        /**
+         * Obtiene el sino que tiene la razon de ajuste
+         * @param reason La razon de ajuste
+         * @returns {number} El nuemero del resultado
+         */
+        ctrl.getSignReason = function (reason) {
+            if(reason.sign === "+") {
+                return 1;
+            }
+            return 0;
+        };
+
+        /**
+         * Metodo para eliminar un producto por su id
+         *
+         * @param id El id del producto
+         */
         ctrl.deleteProduct = function (id) {
             swal({
                     title: "Confirmación",

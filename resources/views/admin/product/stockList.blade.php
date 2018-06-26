@@ -77,6 +77,8 @@
             </div>
         </div>
 
+        @include('admin.product.modalAdjustStockProduct')
+
         @include('admin.product.modalPreviewProduct')
 
         @include('admin.product.modalProductData')

@@ -56,11 +56,11 @@
             });
         };
 
-        service.updateStock = function (product) {
+        service.updateStock = function (productId, quantity, adjusmentReasonId) {
             return $http({
                 method: 'POST',
-                url: service.contextPath + '/admin/product/updateStock',
-                data: $.param({id:product.id,current_stock:product.current_stock,adjusmentReason:product.adjusmentReason}),
+                url: service.contextPath + '/admin/product/updateStockProduct',
+                data: $.param({productId:productId, quantity:quantity, adjusmentReasonId:adjusmentReasonId}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function (results) {
                 return results.data;

@@ -17,6 +17,7 @@ class CreateAdjustmentReasonsTable extends Migration {
             $table->integer('status_id')->unsigned();
             $table->string('description', 50);
             $table->string('abbreviation', 50);
+            $table->string('sign', 10);
 
             $table->foreign('status_id')->references('id')->on('status')
                 ->onUpdate('cascade')->onDelete('cascade');

@@ -16,4 +16,8 @@ class AdjustmentReason extends Model {
     public function status() {
         return $this->hasOne('App\Models\Status', 'id', 'status_id');
     }
+
+    public function findById($id) {
+        return AdjustmentReason::findOrFail($id);
+    }
 }

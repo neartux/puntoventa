@@ -106,6 +106,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
 
     Route::post('/product/delete','ProductController@delete');
 
+    Route::post('/product/updateStockProduct','ProductController@updateStockProduct');
+
     Route::post('/product/updateStock','ProductController@returnProductToStock');
 
     Route::get('/stock/list', 'ProductController@stockList')->name('admin_stock_list');

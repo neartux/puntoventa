@@ -9,6 +9,7 @@ namespace App\Repository\Product;
 
 
 use App\Models\Adjustment;
+use App\Models\AdjustmentReason;
 use App\Models\Client;
 use App\Models\Deparment;
 use App\Models\Product;
@@ -22,13 +23,15 @@ class ProductRepository implements ProductInterface {
     private $deparments;
     private $product;
     private $client;
+    private $adjustmentReason;
 
 
 
-    function __construct(Deparment $deparment, Product $product, Client $client) {
+    function __construct(Deparment $deparment, Product $product, Client $client, AdjustmentReason $adjustmentReason) {
         $this->deparments = $deparment;
         $this->product = $product;
         $this->client = $client;
+        $this->adjustmentReason = $adjustmentReason;
     }
 
     public function findAllDeparments() {
@@ -48,7 +51,28 @@ class ProductRepository implements ProductInterface {
         return DB::select('SELECT * FROM products WHERE status_id = '.StatusKeys::STATUS_ACTIVE.' AND (code LIKE \'%'.$re.'%\' OR description LIKE \'%'.$re.'%\')');
     }
 
-    public function updateStockByIdProduct($productId, $quantity, $isAdd,$return = FALSE) {
+    public function updateStockProduct($productId, $quantity, $reasonId) {
+        $product = $this->product->findById($productId);
+        // Valida que exista caja abierta
+        if (! $product) {
+            throw new \Exception("No existe el producto");
+        }
+        $reason = $this->adjustmentReason->findById($reasonId);
+        // Valida que exista la razon de ajuste
+        if (! $reason) {
+            throw new \Exception("No existe la razon de ajuste");
+        }
+        // Calcula la nueva cantidad
+        if($reason->sign == "+") {
+            $newQuantity = floatval($product->current_stock) + floatval($quantity);
+        } else {
+            $newQuantity = floatval($product->current_stock) - floatval($quantity);
+        }
+        $product->current_stock = floatval($newQuantity);
+        $product->save();
+    }
+
+    public function updateStockByIdProduct($productId, $quantity, $isAdd) {
         $product = $this->product->findById($productId);
         // Determina si es suma o resta
         if ($isAdd) {
@@ -58,10 +82,6 @@ class ProductRepository implements ProductInterface {
         }
 
         $product->save();
-
-        if($return===TRUE){
-            return $product->current_stock;
-        }
     }
 
     public function createAdjustment($userId, $adjustmentReasonId, $productId, $saleId, $quantity, $comments) {

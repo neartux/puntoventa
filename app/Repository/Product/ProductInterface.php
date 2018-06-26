@@ -16,6 +16,8 @@ interface ProductInterface {
 
     public function findProductByCodeOrDescription($re);
 
+    public function updateStockProduct($productId, $quantity, $reasonId);
+
     public function updateStockByIdProduct($productId, $quantity, $isAdd);
 
     public function createAdjustment($userId, $adjustmentReasonId, $productId, $saleId, $quantity, $comments);
