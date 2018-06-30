@@ -37,26 +37,29 @@
                             </div>
                         </div>
                         <div class="col-sm-12 mt">
-                            <div class="col-sm-6" ng-class="{ 'has-error' : formwithdrawal.reasonId.$invalid && !formwithdrawal.reasonId.$pristine }">
+                            <div class="col-sm-6" ng-class="{ 'has-error' : formWithdrawal.reasonId.$invalid && !formWithdrawal.reasonId.$pristine }">
                                 <label for="reasonId" class="">Razon retiro *</label>
-                                <select class="form-control" data-ng-model="ctrl.withDrawalData.reasonId" id="reasonId" name="reasonId">
+                                <select class="form-control" data-ng-model="ctrl.withDrawalData.reasonId" required
+                                        id="reasonId" name="reasonId">
                                     <option value="">Selecciona</option>
                                     <option value="@{{ reason.id }}" data-ng-repeat="reason in ctrl.reasonsWithdrawal.data">
                                         @{{ reason.description }}
                                     </option>
                                 </select>
-                                <span ng-show="formwithdrawal.reasonId.$invalid && !formwithdrawal.reasonId.$pristine"
+                                <span ng-show="formWithdrawal.reasonId.$invalid && !formWithdrawal.reasonId.$pristine"
                                       class="help-block">Selecciona la razon de retiro</span>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" ng-class="{ 'has-error' : formWithdrawal.amountId.$invalid && !formWithdrawal.amountId.$pristine }">
                                 <label for="amountId" class="">Amount *</label>
-                                <input type="text" data-ng-model="ctrl.withDrawalData.amount" id="amountId"
-                                       class="form-control">
+                                <input type="text" data-ng-model="ctrl.withDrawalData.amount" id="amountId" name="amountId" required
+                                       class="form-control numeric-field">
+                                <span ng-show="formWithdrawal.amountId.$invalid && !formWithdrawal.amountId.$pristine"
+                                      class="help-block">Monto requerido</span>
                             </div>
                         </div>
                         <div class="col-sm-12 mt">
                             <div class="col-sm-6">
-                                <label for="commentsId">Comentarios *</label>
+                                <label for="commentsId">Comentarios</label>
                                 <textarea class="form-control" id="commentsId"
                                           data-ng-model="ctrl.withDrawalData.comments"></textarea>
                             </div>
@@ -68,7 +71,7 @@
                     <button type="button" class="btn default" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
                     <button type="button" class="btn yellow"
                             data-ng-disabled="formWithdrawal.$invalid"
-                            data-ng-click="ctrl.applyWithdrawal(formWithdrawal.$valid);"><i class="icon-lock"></i> Aplicar</button>
+                            data-ng-click="ctrl.applyWithdrawal(formWithdrawal.$valid);"><i class="icon-check"></i> Aplicar</button>
                 </div>
             </form>
         </div>

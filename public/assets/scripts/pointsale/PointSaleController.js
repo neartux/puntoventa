@@ -887,29 +887,34 @@
 
         ctrl.findPreviewWithdrawal = function () {
             return PointSaleService.findPreviewWithdrawal().then(function (res) {
-                console.info("RES:DATA = ", res.data);
                 ctrl.previewDataWithdrawal.data = res.data.data;
                 $("#withdrawalCajaModal").modal();
             });
         };
 
-        ctrl.applyWithdrawal = function (isValid) {
-            swal({
-                title: "Confirmación",
-                text: "¿Estas seguro de aplicar el retiro?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-danger",
-                confirmButtonText: "Si, Aplicar!",
-                cancelButtonText: "Cancelar",
-                closeOnConfirm: true
-            }, function (isConfirm) {
-                if(isConfirm) {
-                    PointSaleService.applyWithdrawalCaja(ctrl.withDrawalData).then(function (res) {
-                       console.info("RES = ", res);
-                    });
-                }
-            });
+        ctrl.applyWithdrawal = function (isValid) { // TODO hay bug, probar y corregir llegado momento
+            if(isValid) {
+                swal({
+                    title: "Confirmación",
+                    text: "¿Estas seguro de aplicar el retiro?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Si, Aplicar!",
+                    cancelButtonText: "Cancelar",
+                    closeOnConfirm: true
+                }, function (isConfirm) {
+                    if(isConfirm) {
+                        PointSaleService.applyWithdrawalCaja(ctrl.withDrawalData).then(function (res) {
+                            if(res.data.error) {
+                                showNotification('Error', res.data.message, 'error');
+                            } else {
+                                showNotification('Info', res.data.message, 'info');
+                            }
+                        });
+                    }
+                });
+            }
         };
 
 
