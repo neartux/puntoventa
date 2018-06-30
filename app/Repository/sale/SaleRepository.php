@@ -257,6 +257,27 @@ class SaleRepository implements SaleInterface {
         $caja->save();
     }
 
+    public function applyWithdrawal($reasonId, $amount, $reference, $comments) {
+        // Busca la caja abierta
+        $caja = $this->caja->findCajaOpen();
+        // Valida que exista caja abierta
+        if (! $caja) {
+            throw new \Exception("No hay caja abierta");
+        }
+        // Busca el efectivo en caja
+        $cash = $this->findEfectivoByCaja($caja->id);
+        // Busca lo retirado de caja
+        $withdrawal = $this->findEfectivoRetiradoByCaja($caja->id);
+        // Calcula el disponible
+        $saldo = $cash - $withdrawal;
+        // Valida que alla disponible
+        if($saldo <= NumberKeys::NUMBER_ZERO) {
+            throw new \Exception("No hay efectivo disponible en caja");
+        }
+        // Crea el movimiento de caja
+        $this->createMovementCaja(ApplicationKeys::MOVEMENT_TYPE_SALIDA, $reasonId, null, $amount, $reference, $comments);
+    }
+
     public function findCajasByDate($startDate, $endDate) {
         return DB::select("SELECT caja.id,DATE_FORMAT(opening_date, '".ApplicationKeys::PATTERN_FORMAT_DATE_WITH_HOUR."') AS opening_date,
                 DATE_FORMAT(close_date, '".ApplicationKeys::PATTERN_FORMAT_DATE_WITH_HOUR."') AS close_date,opening_amount,total_earnings,total_withdrawals,total_amount,comments,
@@ -345,5 +366,29 @@ class SaleRepository implements SaleInterface {
           AND sales.user_id = users.id
           AND users.personal_data_id = pdu.id
           ORDER BY sales.id DESC");
+    }
+
+    public function findReasonWithDrawal() {
+        return DB::select('SELECT * FROM reason_withdrawal_caja WHERE id NOT IN ('.ApplicationKeys::REASON_WITHDRAWAL_SALE_CANCELLATION.');');
+    }
+
+    public function findEfectivoByCaja($cajaId) {
+        return DB::selectOne('SELECT sum(sale_payment_methods.amount) AS efectivo
+        FROM sales
+        INNER JOIN movements_caja ON sales.id = movements_caja.sale_id
+        INNER JOIN caja ON movements_caja.caja_id = caja.id
+        LEFT JOIN sale_payment_methods ON sales.id = sale_payment_methods.sale_id
+        LEFT JOIN payment_methods ON sale_payment_methods.payment_method_id = payment_methods.id
+        WHERE caja.id = '.$cajaId.'
+        AND sales.status_id = '.StatusKeys::STATUS_ACTIVE.'
+        AND payment_methods.id = '.ApplicationKeys::PAYMENT_METHOD_CASH)->efectivo;
+    }
+
+    public function findEfectivoRetiradoByCaja($cajaId) {
+        return DB::selectOne('SELECT sum(movements_caja.amount) AS retirado
+        FROM movements_caja
+        INNER JOIN caja ON movements_caja.caja_id = caja.id
+        WHERE caja.id = '.$cajaId.'
+        AND movements_caja.reason_withdrawal_caja_id IN ('.ApplicationKeys::REASON_WITHDRAWAL_PAYMENT_PROVIDER.','.ApplicationKeys::REASON_WITHDRAWAL_PAYMENT_NOTE.','.ApplicationKeys::REASON_WITHDRAWAL_OTHER.')')->retirado;
     }
 }

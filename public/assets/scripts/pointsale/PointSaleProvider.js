@@ -83,6 +83,32 @@
             });
         };
 
+        /**
+         * Metodo que busca todas las razones de retiro
+         */
+        service.findReasonWithdrawal = function () {
+            return $http.get(service.contextPath+'/admin/pointsale/findReasonWithdrawal');
+        };
+
+        /**
+         * Metodo que busca el resumen de la caja actual, previo a retiro
+         */
+        service.findPreviewWithdrawal = function () {
+            return $http.get(service.contextPath+'/admin/pointsale/findPreviewWithdrawalCaja');
+        };
+
+        /**
+         * Llama a metodo para realizar el retiro de caja
+         */
+        service.applyWithdrawalCaja = function (withdrawal) {
+            return $http({
+                method: 'POST',
+                url: service.contextPath + '/admin/pointsale/applyWithdrawal',
+                data: $.param(withdrawal),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        };
+
         return service;
 
     });

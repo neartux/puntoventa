@@ -23,6 +23,8 @@ interface SaleInterface {
 
     public function cancelSale($saleId, $userId);
 
+    public function applyWithdrawal($reasonId, $amount, $reference, $comments);
+
     public function findCajasByDate($startDate, $endDate);
 
     public function findSalesByCaja($cajaId);
@@ -38,4 +40,10 @@ interface SaleInterface {
     public function findSalesByDates($startDate, $endDate);
 
     public function findSalesByDatesAndUser($startDate, $endDate, $userId);
+
+    public function findReasonWithDrawal();
+
+    public function findEfectivoByCaja($cajaId);
+
+    public function findEfectivoRetiradoByCaja($cajaId);
 }

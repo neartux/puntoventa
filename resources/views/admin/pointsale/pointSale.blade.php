@@ -46,8 +46,13 @@
                                     <div class="color-white bold mb-n mt-xs" style="margin-top: -10px !important"> Descuento </div>
                                 </a>
 
+                                <a href="javascript:;" class="icon-btn btn btn blue-chambray border-blue-chambray ml-xl"
+                                   data-ng-click="ctrl.findPreviewWithdrawal();">
+                                    <i class="icon-share-alt mt-xs fnt-sz-25"></i>
+                                    <div class="color-white bold mb-n mt-n"> Retiro </div>
+                                </a>
 
-                                <a href="javascript:;" class="icon-btn btn btn red-intense border-blue-chambray ml-xl"
+                                <a href="javascript:;" class="icon-btn btn btn red-intense border-blue-chambray"
                                     data-ng-click="ctrl.findPreviewCloseCaja();">
                                     <i class="icon-drawer mt-xs fnt-sz-25"></i>
                                     <div class="color-white bold mb-n mt-n"> Cerrar Caja </div>
@@ -295,6 +300,8 @@
         @include('admin.pointsale.ticketView')
 
         @include('admin.pointsale.bulkProductModalView')
+
+        @include('admin.pointsale.withdrawalCajaModalView')
 
 
     </div>

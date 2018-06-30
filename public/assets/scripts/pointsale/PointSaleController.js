@@ -19,6 +19,9 @@
         ctrl.storeTO = {};
         ctrl.bulkProductId = ELEMENT_NOT_FOUND;
         ctrl.temporalProductBulk = ELEMENT_NOT_FOUND;
+        ctrl.reasonsWithdrawal = { data: [] };
+        ctrl.previewDataWithdrawal = { data: [] };
+        ctrl.withDrawalData = {};
 
 
         /**
@@ -61,6 +64,9 @@
                     $scope.$apply();
                 },200);
             });
+
+            // Busca todas las razones de retiro
+            ctrl.findReasonWithdrawal();
         };
 
         /**
@@ -93,6 +99,13 @@
 
             // Limpia variables generales
             ctrl.cleanAndFocusInputProduct();
+        };
+
+        ctrl.findReasonWithdrawal = function () {
+            return PointSaleService.findReasonWithdrawal().then(function (res) {
+                console.info("REASONS = ", res.data);
+                ctrl.reasonsWithdrawal.data = res.data;
+            });
         };
 
         /**
@@ -870,6 +883,33 @@
                 "margin-top" : ctrl.configurationStyle.footer_y+ "px",
                 "font-size" : ctrl.configurationStyle.footer_size + "px"
             };
+        };
+
+        ctrl.findPreviewWithdrawal = function () {
+            return PointSaleService.findPreviewWithdrawal().then(function (res) {
+                console.info("RES:DATA = ", res.data);
+                ctrl.previewDataWithdrawal.data = res.data.data;
+                $("#withdrawalCajaModal").modal();
+            });
+        };
+
+        ctrl.applyWithdrawal = function (isValid) {
+            swal({
+                title: "Confirmación",
+                text: "¿Estas seguro de aplicar el retiro?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, Aplicar!",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: true
+            }, function (isConfirm) {
+                if(isConfirm) {
+                    PointSaleService.applyWithdrawalCaja(ctrl.withDrawalData).then(function (res) {
+                       console.info("RES = ", res);
+                    });
+                }
+            });
         };
 
 

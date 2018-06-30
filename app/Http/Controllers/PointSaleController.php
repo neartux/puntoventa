@@ -65,6 +65,10 @@ class PointSaleController extends Controller {
         return response()->json($this->client->findClientByNameOrLastName($request->input('q')));
     }
 
+    public function findReasonWithdrawal() {
+        return response()->json($this->sale->findReasonWithDrawal());
+    }
+
     public function createSale(Request $request) {
         DB::beginTransaction();
         try{
@@ -119,6 +123,34 @@ class PointSaleController extends Controller {
             return response()->json(array("error" => false, "message" => "Se ha cerrado la caja correctamente"));
         } catch(\Exception $e){
             DB::rollBack();
+            return response()->json(array("error" => true, "message" => $e->getMessage()));
+        }
+    }
+
+    public function findPreviewWithdrawal() {
+        try {
+            // Busca la caja abierta
+            $caja = $this->sale->findCajaOpened();
+            // Obtiene el numero de ventas realizadas en la caja abierta
+            $totalCash = $this->sale->findEfectivoByCaja($caja->id);
+            // Obtiene el monto total de las ventas hechas en la caja
+            $totalWithdrawal = $this->sale->findEfectivoRetiradoByCaja($caja->id);
+            // Envia el resultado
+            $data = array("caja" => $caja, "totalCash" => $totalCash, "totalWithdrawal" => $totalWithdrawal);
+            return response()->json(array("error" => false, "data" => $data));
+        } catch (\Exception $e) {
+            return response()->json(array("error" => true, "message" => $e->getMessage()));
+        }
+    }
+
+    public function applyWithdrawal(Request $request) {
+        try {
+            $reasonId = $request->get('reasonId');
+            $amount = $request->get('amount');
+            $comments = $request->get('comments');
+            $this->sale->applyWithdrawal($reasonId, $amount, $comments, $comments);
+            return response()->json(array("error" => false, "message" => "Se ha efectuado el retiro"));
+        } catch (\Exception $e) {
             return response()->json(array("error" => true, "message" => $e->getMessage()));
         }
     }
