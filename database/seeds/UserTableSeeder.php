@@ -33,15 +33,15 @@ class UserTableSeeder extends Seeder {
         DB::table('users')->insert($user);
 
         $pDU = [
-            ['id' => 4, 'name' => 'Felipe', 'last_name' => 'Lopez'],
+            ['id' => 4, 'name' => 'Administrador', 'last_name' => '.'],
         ];
 
         $lDU = [
-            ['id' => 4, 'address' => 'Merida', 'cell_phone' => '9911108191', 'email' => 'flopez@hotmail.com']
+            ['id' => 4, 'address' => 'Merida', 'cell_phone' => 'NA', 'email' => 'NA']
         ];
 
         $userS = [
-            ['status_id' => StatusKeys::STATUS_ACTIVE, 'personal_data_id' => 4, 'location_data_id' => 4, 'user_name' => 'f.lopez', 'password' => bcrypt('flopez@2018')]
+            ['status_id' => StatusKeys::STATUS_ACTIVE, 'personal_data_id' => 4, 'location_data_id' => 4, 'user_name' => 'administrador', 'password' => bcrypt('demo')]
         ];
 
         DB::table('personal_data')->insert($pDU);

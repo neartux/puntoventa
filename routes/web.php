@@ -92,6 +92,10 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
 
     Route::post('/configuration/saveConfiguration', 'ConfigurationController@saveConfiguration');
 
+    Route::get('/configuration/viewChangePassword', 'ConfigurationController@viewChangePassword')->name('change_password');
+
+    Route::post('/configuration/changePassword', 'ConfigurationController@changePassword');
+
     Route::get('/product/list','ProductController@productList')->name('admin_product_list');
 
     Route::get('/product/findAllProducts','ProductController@findAllProduct');

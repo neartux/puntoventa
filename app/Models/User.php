@@ -49,4 +49,8 @@ class User extends Authenticatable {
     public function locationData() {
         return $this->hasOne('App\Models\LocationData', 'id', 'location_data_id');
     }
+
+    public function findById($userId) {
+        return User::findOrFail($userId);
+    }
 }

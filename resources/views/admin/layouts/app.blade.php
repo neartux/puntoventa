@@ -67,11 +67,17 @@
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    <i class="icon-key"></i> Log Out </a>
+                                    <i class="icon-logout"></i> Log Out </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
                             </li>
+                            @role('admin')
+                            <li>
+                                <a href="{{ route('change_password') }}">
+                                    <i class="icon-lock"></i> Cambiar Password </a>
+                            </li>
+                            @endrole
                         </ul>
                     </li>
 
@@ -128,12 +134,12 @@
                     </a>
                 </li>
                 
-                {{--<li class="nav-item"> TODO comentado ya que no aplica para puntoventa general
+                <li class="nav-item">
                     <a href="{{ route('order_list_view') }}" class="nav-link nav-toggle">
                         <i class="icon-notebook"></i>
                         <span class="title">Pedidos</span>
                     </a>
-                </li>--}}
+                </li>
 
                 <li class="nav-item">
                     <a href="javascript:;" class="nav-link nav-toggle">
@@ -147,22 +153,30 @@
                                 <span class="title">Ventas Del Día</span>
                             </a>
                         </li>
+
+                        @role('admin')
                         <li class="nav-item">
                             <a href="{{ route('sales_by_dates') }}" class="nav-link ">
                                 <span class="title">Ventas Por Fechas</span>
                             </a>
                         </li>
+                        @endrole
 
+                        @role('admin')
                         <li class="nav-item">
                             <a href="{{ route('sales_by_dates_and_user') }}" class="nav-link ">
                                 <span class="title">Ventas Por Usuario</span>
                             </a>
                         </li>
+                        @endrole
+
+                        @role('admin')
                         <li class="nav-item">
                             <a href="{{ route('cajas_closed') }}" class="nav-link ">
                                 <span class="title">Cajas Cerradas</span>
                             </a>
                         </li>
+                        @endrole
                     </ul>
                 </li>
 

@@ -11,5 +11,6 @@ final class NumberKeys {
 
     const NUMBER_ZERO = 0;
     const NUMBER_ONE = 1;
+    const NUMBER_SIX = 6;
 
 }

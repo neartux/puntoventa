@@ -9,6 +9,8 @@ namespace App\Repository\user;
 
 interface UserInterface {
 
+    public function updatePassword($userId, $password);
+
     public function findAllUsers();
 
     public function findStore();

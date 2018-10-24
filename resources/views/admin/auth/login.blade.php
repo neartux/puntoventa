@@ -28,10 +28,6 @@
     <form class="login-form" method="POST" action="{{ route('login') }}">
         {{ csrf_field() }}
         <h3 class="form-title font-green">Sign In</h3>
-        <div class="alert alert-danger display-hide">
-            <button class="close" data-close="alert"></button>
-            <span> Enter any username and password. </span>
-        </div>
         <div class="form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
             <label class="control-label visible-ie8 visible-ie9">Username</label>
             <input class="form-control form-control-solid placeholder-no-fix form-group" id="user_name"

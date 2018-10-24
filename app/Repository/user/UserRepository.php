@@ -7,11 +7,29 @@
 namespace App\Repository\user;
 
 
+use App\User;
 use App\Utils\Keys\common\StatusKeys;
 use App\Utils\Keys\user\UserKeys;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UserInterface {
+
+    private $user;
+
+    /**
+     * UserRepository constructor.
+     * @param $user
+     */
+    public function __construct(User $user) {
+        $this->user = $user;
+    }
+
+
+    public function updatePassword($userId, $password) {
+        $user = $this->user->findById($userId);
+        $user->password = bcrypt($password);
+        $user->save();
+    }
 
     public function findAllUsers() {
         return DB::select("SELECT users.id,users.user_name,personal_data.name,personal_data.last_name

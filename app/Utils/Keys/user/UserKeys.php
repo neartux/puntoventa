@@ -16,6 +16,7 @@ final class UserKeys {
     const EMAIL_ROOT_USER = "near31_3112@hotmail.com";
     const ROLE_USER_ROOT = 1;
     const ROLE_USER_ADMIN = 2;
+    const ROLE_USER_CAJERO = 3;
     const PERMISSION_SYSTEM_CONFIGURATION = 1;
 
 }

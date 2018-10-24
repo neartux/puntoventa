@@ -15,6 +15,7 @@ class RolesTableSeeder extends Seeder {
         $roles = [
             ['id' => UserKeys::ROLE_USER_ROOT, 'name' => 'root', 'display_name' => 'Root', 'description' => 'Role for the user with all permissions', 'created_at' => new \DateTime(), 'updated_at' => new \DateTime()],
             ['id' => UserKeys::ROLE_USER_ADMIN, 'name' => 'admin', 'display_name' => 'Administrator', 'description' => 'Role for the user Administrator', 'created_at' => new \DateTime(), 'updated_at' => new \DateTime()],
+            ['id' => UserKeys::ROLE_USER_CAJERO, 'name' => 'cajero', 'display_name' => 'Cajero', 'description' => 'Role for the user Cajero', 'created_at' => new \DateTime(), 'updated_at' => new \DateTime()],
         ];
 
         DB::table('roles')->insert($roles);
@@ -22,10 +23,14 @@ class RolesTableSeeder extends Seeder {
         $role_users = [
             ['user_id' => UserKeys::USER_ROOT_ID, 'role_id' => UserKeys::ROLE_USER_ROOT],
             ['user_id' => UserKeys::USER_ROOT_ID, 'role_id' => UserKeys::ROLE_USER_ADMIN],
+            ['user_id' => UserKeys::USER_ROOT_ID, 'role_id' => UserKeys::ROLE_USER_CAJERO],
         ];
+
+        DB::table('role_user')->insert($role_users);
 
         $role_user_bussinness = [
             ['user_id' => UserKeys::USER_ADMIN_BUSSINESS_ID, 'role_id' => UserKeys::ROLE_USER_ADMIN],
+            ['user_id' => UserKeys::USER_ADMIN_BUSSINESS_ID, 'role_id' => UserKeys::ROLE_USER_CAJERO],
         ];
 
         DB::table('role_user')->insert($role_user_bussinness);
