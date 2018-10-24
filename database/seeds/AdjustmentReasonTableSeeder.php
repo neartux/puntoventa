@@ -15,11 +15,11 @@ class AdjustmentReasonTableSeeder extends Seeder {
     public function run() {
 
         $adjustment_sale = [
-            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_SALE, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Ajuste por venta', 'abbreviation' => 'AV']
+            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_SALE, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Ajuste por venta', 'abbreviation' => 'AV', 'sign' => '-']
         ];
 
         $adjustment_cancellation = [
-            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_SALE_CANCELLATION, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Ajuste por cancelación de venta', 'abbreviation' => 'ACV']
+            ['id' => ApplicationKeys::ADJUSTMENT_REASON_BY_SALE_CANCELLATION, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Ajuste por cancelación de venta', 'abbreviation' => 'ACV', 'sign' => '+']
         ];
 
         $AEP = [
