@@ -9,7 +9,7 @@
             <ul class="page-breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="index.html">Home</a>
+                    <a href="{{ route('point_sale_view') }}">Home</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>

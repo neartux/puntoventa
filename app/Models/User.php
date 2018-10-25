@@ -8,6 +8,8 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable {
 
+    protected $table = 'users';
+
     use EntrustUserTrait;
     use Notifiable;
 

@@ -148,4 +148,14 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
 
     Route::get('/client/delete/{id}', 'ClientController@deleteClient');
 
+    Route::get('/provider/list', 'ProviderController@providerList')->name('admin_provider_list');
+
+    Route::get('/provider/findAllProviders', 'ProviderController@findAllProviders');
+
+    Route::post('/provider/createProvider', 'ProviderController@createProvider');
+
+    Route::post('/provider/updateProvider', 'ProviderController@updateProvider');
+
+    Route::get('/provider/delete/{id}', 'ProviderController@deleteProvider');
+
 });

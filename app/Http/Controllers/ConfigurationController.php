@@ -15,6 +15,7 @@ use App\Models\PrintingFormatsConfiguration;
 use App\Repository\user\UserInterface;
 use App\Utils\Keys\common\ApplicationKeys;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ConfigurationController extends Controller {
 
@@ -37,11 +38,11 @@ class ConfigurationController extends Controller {
     public function changePassword(Request $request) {
         DB::beginTransaction();
         try{
-            $oldPassword = bcrypt($request->input('old_password'));
+            $oldPassword = $request->input('old_password');
             $newPassword = $request->input('new_password');
             $newPassword2 = $request->input('new_password2');
             // Validate old password
-            if ($oldPassword != Auth::user()->password) {
+            if (!Hash::check($oldPassword, Auth::user()->password)) {
                 return response()->json(array("error" => true, "message" => "La contraseña actual no es correcta"));
             }
             // Validate length

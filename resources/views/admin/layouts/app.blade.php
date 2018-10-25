@@ -110,6 +110,11 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item  ">
+                            <a href="{{ route('admin_provider_list') }}" class="nav-link ">
+                                <span class="title">Proveedores</span>
+                            </a>
+                        </li>
+                        <li class="nav-item  ">
                             <a href="{{ route('admin_client_list') }}" class="nav-link ">
                                 <span class="title">Clientes</span>
                             </a>
@@ -134,12 +139,12 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
+                {{--<li class="nav-item">
                     <a href="{{ route('order_list_view') }}" class="nav-link nav-toggle">
                         <i class="icon-notebook"></i>
                         <span class="title">Pedidos</span>
                     </a>
-                </li>
+                </li>--}}
 
                 <li class="nav-item">
                     <a href="javascript:;" class="nav-link nav-toggle">
@@ -214,7 +219,7 @@
 
 <div class="page-footer">
     <div class="page-footer-inner"> 2018 &copy; Punto Venta By
-        <a target="_blank" href="javascript:;">Diamond Technology</a>
+        <a target="_blank" href="javascript:;">Reliable Systems</a>
         <div class="scroll-to-top">
             <i class="icon-arrow-up"></i>
         </div>

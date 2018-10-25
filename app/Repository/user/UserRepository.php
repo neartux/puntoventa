@@ -27,7 +27,12 @@ class UserRepository implements UserInterface {
 
     public function updatePassword($userId, $password) {
         $user = $this->user->findById($userId);
+        // Valida que exista el usuario
+        if (! $user) {
+            throw new \Exception("No existe el usuario");
+        }
         $user->password = bcrypt($password);
+        $user->updated_at = \Carbon\Carbon::now();
         $user->save();
     }
 

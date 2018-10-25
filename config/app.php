@@ -184,6 +184,7 @@ return [
         App\Services\order\OrderService::class,
         App\Services\client\ClientService::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        App\Services\provider\ProviderService::class,
 
     ],
 
