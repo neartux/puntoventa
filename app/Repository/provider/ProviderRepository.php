@@ -22,7 +22,7 @@ class ProviderRepository implements ProviderInterface {
     }
 
     public function findAllProviders() {
-        return DB::select('SELECT providers.id,personal_data.name,personal_data.last_name,location_data.address,location_data.city as ciudad,
+        return DB::select('SELECT providers.id,personal_data.name,personal_data.last_name,personal_data.company_name,location_data.address,location_data.city as ciudad,
         location_data.phone,location_data.cell_phone,location_data.email
         FROM providers
         INNER JOIN location_data ON providers.location_data_id = location_data.id
@@ -42,6 +42,7 @@ class ProviderRepository implements ProviderInterface {
 
         $personal_data = new PersonalData();
 
+        $personal_data->company_name = $providerValues['company_name'];
         $personal_data->name = $providerValues['name'];
         $personal_data->last_name = $providerValues['last_name'];
 
@@ -68,6 +69,7 @@ class ProviderRepository implements ProviderInterface {
         $provider->locationData->cell_phone = $providerValues['cell_phone'];
         $provider->locationData->email = $providerValues['email'];
 
+        $provider->personalData->company_name = $providerValues['company_name'];
         $provider->personalData->name = $providerValues['name'];
         $provider->personalData->last_name = $providerValues['last_name'];
 

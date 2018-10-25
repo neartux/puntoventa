@@ -33,6 +33,7 @@
                         } else {
                             showNotification("Info", response.data.message, "success");
                             ctrl.formData = {};
+                            $scope.securityForm.$setPristine();
                         }
                         stopLoading();
                     }, stopLoading());

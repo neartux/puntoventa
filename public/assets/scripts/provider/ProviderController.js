@@ -75,6 +75,7 @@
                     ctrl.provider.id = response.data.id;
                     ctrl.providerList.push(angular.copy(ctrl.provider));
                     ctrl.showProviderList = true;
+                    $scope.providerForm.$setPristine();
                     showNotification('Info', response.data.message, 'info');
                 }
                 stopLoading();
@@ -106,6 +107,7 @@
                 else {
                     ctrl.providerList[ctrl.provider.indexElem] = angular.copy(ctrl.provider);
                     ctrl.showProviderList = true;
+                    $scope.providerForm.$setPristine();
                     showNotification('Info', response.data.message, 'info');
                 }
                 stopLoading();

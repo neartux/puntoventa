@@ -9,7 +9,7 @@
         service.changePassword = function (securityData) {
             return $http({
                 method: 'POST',
-                url: service.contextPath + '/admin/configuration/changePassword',
+                url: service.contextPath + '/admin/security/changePassword',
                 data: $.param(securityData),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });

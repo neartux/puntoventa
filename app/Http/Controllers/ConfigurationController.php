@@ -6,16 +6,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Utils\Keys\common\NumberKeys;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 use App\Models\PrintingFormats;
 use App\Models\PrintingFormatsConfiguration;
 use App\Repository\user\UserInterface;
 use App\Utils\Keys\common\ApplicationKeys;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class ConfigurationController extends Controller {
 
@@ -29,36 +25,6 @@ class ConfigurationController extends Controller {
     public function __construct(UserInterface $user) {
         $this->middleware('auth');
         $this->user = $user;
-    }
-
-    public function viewChangePassword() {
-        return view('admin.configuration.password');
-    }
-
-    public function changePassword(Request $request) {
-        DB::beginTransaction();
-        try{
-            $oldPassword = $request->input('old_password');
-            $newPassword = $request->input('new_password');
-            $newPassword2 = $request->input('new_password2');
-            // Validate old password
-            if (!Hash::check($oldPassword, Auth::user()->password)) {
-                return response()->json(array("error" => true, "message" => "La contraseña actual no es correcta"));
-            }
-            // Validate length
-            if (strlen($newPassword) < NumberKeys::NUMBER_SIX || strlen($newPassword2) < NumberKeys::NUMBER_SIX) {
-                return response()->json(array("error" => true, "message" => "La contraseña debe tener minimo 6 caracteres"));
-            }
-            // Validate match
-            if ($newPassword != $newPassword2) {
-                return response()->json(array("error" => true, "message" => "Las contraseñas no coinciden"));
-            }
-            $this->user->updatePassword(Auth::user()->id, $newPassword);
-            return response()->json(array("error" => false, "message" => "Se ha actualizado la contraseña correctamente"));
-        } catch(\Exception $e){
-            DB::rollBack();
-            return response()->json(array("error" => true, "message" => $e->getMessage()));
-        }
     }
 
     public function configurationTicket() {

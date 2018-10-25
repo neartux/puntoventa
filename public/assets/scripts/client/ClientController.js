@@ -75,6 +75,7 @@
                     ctrl.client.id = response.data.id;
                     ctrl.clientList.push(angular.copy(ctrl.client));
                     ctrl.showClientList = true;
+                    $scope.clientForm.$setPristine();
                     showNotification('Info', response.data.message, 'info');
                 }
                 stopLoading();
@@ -106,6 +107,7 @@
                 else {
                     ctrl.clientList[ctrl.client.indexElem] = angular.copy(ctrl.client);
                     ctrl.showClientList = true;
+                    $scope.clientForm.$setPristine();
                     showNotification('Info', response.data.message, 'info');
                 }
                 stopLoading();

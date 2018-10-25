@@ -27,6 +27,14 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
 
                             <div class="form-group">
+                                <label class="col-md-3 control-label">Empresa:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control border-input" name="company_name" data-ng-model="ctrl.provider.company_name" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-md-3 control-label">Nombres:
                                     <span class="required"> * </span>
                                 </label>

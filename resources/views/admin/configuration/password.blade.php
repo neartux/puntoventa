@@ -32,20 +32,20 @@
                         <form novalidate name="securityForm">
                             <div class="form-body">
                                 <div class="form-group has-success"
-                                     ng-class="{'has-error' : securityForm.old_password.$invalid && !securityForm.old_password.$pristine }">
-                                    <label class="control-label">Contrase&ntilde;a Anterior</label>
-                                    <input type="password" class="form-control" name="old_password"
-                                           ng-model="ctrl.formData.old_password" maxlength="15" required> </div>
+                                     ng-class="{'has-error' : securityForm.current_password.$invalid && !securityForm.current_password.$pristine }">
+                                    <label class="control-label">Contrase&ntilde;a Actual</label>
+                                    <input type="password" class="form-control" name="current_password"
+                                           ng-model="ctrl.formData.current_password" maxlength="15" required> </div>
                                 <div class="form-group has-warning"
-                                     ng-class="{'has-error' : securityForm.new_password.$invalid && !securityForm.new_password.$pristine }">
+                                     ng-class="{'has-error' : securityForm.password.$invalid && !securityForm.password.$pristine }">
                                     <label class="control-label">Nueva Contrase&ntilde;a</label>
-                                    <input type="password" class="form-control" name="new_password"
-                                           ng-model="ctrl.formData.new_password" maxlength="15" required> </div>
+                                    <input type="password" class="form-control" name="password"
+                                           ng-model="ctrl.formData.password" maxlength="15" required> </div>
                                 <div class="form-group has-warning"
-                                     ng-class="{'has-error' : securityForm.new_password2.$invalid && !securityForm.new_password2.$pristine }">
+                                     ng-class="{'has-error' : securityForm.password_confirmation.$invalid && !securityForm.password_confirmation.$pristine }">
                                     <label class="control-label">Repetir Contrase&ntilde;a</label>
-                                    <input type="password" class="form-control" name="new_password2"
-                                           ng-model="ctrl.formData.new_password2" maxlength="15" required> </div>
+                                    <input type="password" class="form-control" name="password_confirmation"
+                                           ng-model="ctrl.formData.password_confirmation" maxlength="15" required> </div>
                             </div>
                             <div class="form-actions">
                                 <a href="javascript:;"
