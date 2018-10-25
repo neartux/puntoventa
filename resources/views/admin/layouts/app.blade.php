@@ -124,6 +124,13 @@
                                 <span class="title">Departamentos</span>
                             </a>
                         </li>
+                        @role('admin')
+                            <li class="nav-item  ">
+                                <a href="{{ route('admin_deparment_list') }}" class="nav-link ">
+                                    <span class="title">Usuarios</span>
+                                </a>
+                            </li>
+                        @endrole
                     </ul>
                 </li>
                 <li class="nav-item">

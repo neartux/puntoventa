@@ -369,12 +369,4 @@
     <script src="{{ asset('assets/scripts/product/ProductController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/scripts/product/ProductProvider.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/angular-datatable/angular-datatables.min.js') }}" type="text/javascript"></script>
-
-    <!-- <script type="text/javascript">
-        $(document).ready(function () {
-            $('#ProductModal').on('shown.bs.modal', function() {
-                $("#descriptionProduct").focus();
-            });
-        });
-    </script> -->
 @endsection

@@ -4,6 +4,10 @@
     app.controller('SecurityController', function($scope, $http, SecurityService) {
         var ctrl = this;
         ctrl.formData = {};
+        ctrl.userList = { data: [] };
+        ctrl.dtInstance = {};
+        ctrl.userTO = {};
+        ctrl.isCreateUser = true;
 
         /**
          * Initialize app, instance context path of app
@@ -41,6 +45,25 @@
             });
         };
 
+        /**
+         * Initialize app, instance context path of app
+         * @param contextPath Application path
+         */
+        ctrl.initUser = function (contextPath) {
+            // Coloca el path del server
+            SecurityService.contextPath = contextPath;
+        };
+
+        /**
+         * Despliega la vista para crear un nuevo producto
+         */
+        ctrl.viewCreateUser = function () {
+            ctrl.userTO = {};
+            ctrl.userTO.id = 0;
+            ctrl.isCreateUser = true;
+            ctrl.titleFormAction = 'Crear Usuario';
+            $("#userModal").modal();
+        };
 
     });
 
