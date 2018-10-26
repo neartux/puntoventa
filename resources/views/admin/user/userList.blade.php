@@ -81,7 +81,7 @@
                                             Modificar
                                         </a>
                                         <a href="javascript:;" class="btn btn-xs blue"
-                                           data-ng-click="ctrl.changePassword(user)">
+                                           data-ng-click="ctrl.changePasswordView(user)">
                                             <i class="icon-note"></i>
                                             Cambiar Password
                                         </a>

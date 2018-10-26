@@ -10,6 +10,7 @@ namespace App\Repository\user;
 use App\Models\LocationData;
 use App\Models\PersonalData;
 use App\User;
+use App\Utils\Keys\common\ApplicationKeys;
 use App\Utils\Keys\common\NumberKeys;
 use App\Utils\Keys\common\StatusKeys;
 use App\Utils\Keys\user\UserKeys;
@@ -91,6 +92,10 @@ class UserRepository implements UserInterface {
         $user_->created_at = \Carbon\Carbon::now();
 
         $user_->save();
+
+        $roles = [UserKeys::ROLE_USER_CAJERO];
+        // Agregar role de cajero
+        $this->addRolesToUser($user_->id, $roles);
     }
 
     public function updateUser($userData) {

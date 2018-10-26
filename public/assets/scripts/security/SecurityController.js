@@ -91,6 +91,7 @@
             ctrl.userTO.id = 0;
             ctrl.isCreateUser = true;
             ctrl.titleFormAction = 'Crear Usuario';
+            $scope.userForm.$setPristine();
             $("#userModal").modal();
         };
 
@@ -148,6 +149,7 @@
             ctrl.isCreateUser = false;
             ctrl.userTO = angular.copy(user);
             ctrl.titleFormAction = 'Editar usuario ' + user.user_name;
+            $scope.userForm.$setPristine();
             $("#userModal").modal();
         };
 
@@ -198,6 +200,47 @@
                         stopLoading();
                     });
                 });
+        };
+
+        /**
+         * Ver modal para cambiar contraseña
+         *
+         * @param user El usuario
+         */
+        ctrl.changePasswordView = function(user) {
+            ctrl.userTO = angular.copy(user);
+            $scope.securityForm.$setPristine();
+            $("#changePassword").modal();
+        };
+
+        /**
+         * Actualiza la contraseña de algun usuario de la lista de usuarios
+         */
+        ctrl.changePasswordUser = function () {
+            swal({
+                title: "Confirmación",
+                text: "¿Estas seguro de cambiar la contraseña?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, Cambiar!",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoading("Actualizando La Contraseña");
+                    return SecurityService.changePasswordUser(ctrl.userTO).then(function (response) {
+                        if (response.data.error) {
+                            showNotification("Error", response.data.message, "error");
+                        } else {
+                            showNotification("Info", response.data.message, "success");
+                            ctrl.formData = {};
+                            $("#changePassword").modal("hide");
+                        }
+                        stopLoading();
+                    }, stopLoading());
+                }
+            });
         };
 
     });
