@@ -55,18 +55,22 @@ class ProductController extends Controller {
         $unities = $this->product->findAllUnit();
         return response()->json($unities);
     }
+
     public function findAllDeparment(){
         $deparments = $this->product->findAllDeparments();
         return response()->json($deparments);
     }
+
     public function findAllProduct(){
         $products = $this->product->findAllProducts();
         return response()->json($products);
     }
+
     public function findInversionStock() {
         $inversion = $this->product->findInversionStock();
         return response()->json($inversion);
     }
+
     public function findAllAjusmentReasons(){
         $adjusmentReasons = $this->product->findAllAjusmentReasons();
         return response()->json($adjusmentReasons);

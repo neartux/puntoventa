@@ -14,6 +14,7 @@ use App\Models\Client;
 use App\Models\Deparment;
 use App\Models\Product;
 use App\Utils\Keys\common\ApplicationKeys;
+use App\Utils\Keys\common\NumberKeys;
 use App\Utils\Keys\common\StatusKeys;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -126,14 +127,14 @@ class ProductRepository implements ProductInterface {
     }
 
     public function findAllAjusmentReasons(){
-        return DB::select('SELECT * FROM adjustment_reasons WHERE status_id = '.StatusKeys::STATUS_ACTIVE.' AND id not in (1,2)');
+        return DB::select('SELECT * FROM adjustment_reasons WHERE status_id = '.StatusKeys::STATUS_ACTIVE.' AND id not in ('.ApplicationKeys::ADJUSTMENT_REASON_BY_SALE.','.ApplicationKeys::ADJUSTMENT_REASON_BY_SALE_CANCELLATION.')');
     }
 
     public function findInversionStock() {
-        return DB::selectOne('SELECT sum(current_stock) as productos,sum(products.purchase_price * products.current_stock) as total FROM products WHERE current_stock > 0');
+        return DB::selectOne('SELECT sum(current_stock) as productos,sum(products.purchase_price * products.current_stock) as total FROM products WHERE current_stock > '.NumberKeys::NUMBER_ZERO);
     }
 
     public function existProductByCode($id, $code) {
-        return DB::selectOne('SELECT count(*) > 0 exist FROM products WHERE id != '.$id.' AND status_id = 1 AND UPPER(code) = \''.$code.'\'')->exist;
+        return DB::selectOne('SELECT count(*) > '.NumberKeys::NUMBER_ZERO.' exist FROM products WHERE id != '.$id.' AND status_id = '.StatusKeys::STATUS_ACTIVE.' AND UPPER(code) = \''.$code.'\'')->exist;
     }
 }

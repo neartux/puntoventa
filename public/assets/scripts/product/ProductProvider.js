@@ -47,6 +47,7 @@
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
         };
+
         service.deleteProduct = function (id) {
             return $http({
                 method: 'POST',

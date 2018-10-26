@@ -158,4 +158,20 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
 
     Route::post('/security/changePassword', 'SecurityController@changePassword');
 
+    Route::get('/security/existUserName/{id}/{userName}', 'SecurityController@existUserName');
+
+    Route::get('/security/findUsers', 'SecurityController@findUsers');
+
+    Route::get('/security/findRolesNoAdmin', 'SecurityController@findRolesNoAdmin');
+
+    Route::post('/security/save','SecurityController@save');
+
+    Route::post('/security/update','SecurityController@update');
+
+    Route::post('/security/delete','SecurityController@delete');
+
+    Route::post('/security/changePasswordUser', 'SecurityController@changePasswordUser');
+
+    Route::post('/security/addRolesToUser', 'SecurityController@addRolesToUser');
+
 });

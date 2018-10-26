@@ -7,7 +7,10 @@
 namespace App\Repository\user;
 
 
+use App\Models\LocationData;
+use App\Models\PersonalData;
 use App\User;
+use App\Utils\Keys\common\NumberKeys;
 use App\Utils\Keys\common\StatusKeys;
 use App\Utils\Keys\user\UserKeys;
 use Illuminate\Support\Facades\DB;
@@ -56,5 +59,82 @@ class UserRepository implements UserInterface {
         FROM printing_formats
         INNER JOIN printing_formats_configurations ON printing_formats.id = printing_formats_configurations.printing_format_id
         WHERE printing_formats.id = ".$printingFormatId);
+    }
+
+    public function existUserName($id, $userName) {
+        return DB::selectOne('SELECT count(*) > '.NumberKeys::NUMBER_ZERO.' exist FROM users WHERE id != '.$id.' AND status_id = '.StatusKeys::STATUS_ACTIVE.' AND UPPER(user_name) = \''.$userName.'\'')->exist;
+    }
+
+    public function saveUser($userData) {
+        $location_data = new LocationData();
+        $location_data->address = $userData['address'];
+        $location_data->phone = $userData['phone'];
+        $location_data->cell_phone = $userData['cell_phone'];
+        $location_data->email = $userData['email'];
+
+        $location_data->save();
+
+        $personal_data = new PersonalData();
+
+        $personal_data->name = $userData['name'];
+        $personal_data->last_name = $userData['last_name'];
+
+        $personal_data->save();
+
+        $user_ = new User();
+        $user_->status_id = StatusKeys::STATUS_ACTIVE;
+        $user_->personal_data_id = $personal_data->id;
+        $user_->location_data_id = $location_data->id;
+
+        $user_->user_name = $userData['user_name'];
+        $user_->password = bcrypt($userData['password']);
+        $user_->created_at = \Carbon\Carbon::now();
+
+        $user_->save();
+    }
+
+    public function updateUser($userData) {
+        $user = $this->user->findById($userData['id']);
+        if (!$user) {
+            throw new \Exception("El usuario no se encontro");
+        }
+        $user->locationData->address = $userData['address'];
+        $user->locationData->phone = $userData['phone'];
+        $user->locationData->cell_phone = $userData['cell_phone'];
+        $user->locationData->email = $userData['email'];
+
+        $user->personalData->name = $userData['name'];
+        $user->personalData->last_name = $userData['last_name'];
+
+        $user->push();
+    }
+
+    public function deleteUser($id) {
+        $user = $this->user->findById($id);
+        if (!$user) {
+            throw new \Exception("El usuario no se encontro");
+        }
+        $user->status_id = StatusKeys::STATUS_INACTIVE;
+
+        $user->save();
+    }
+
+    public function findRolesNoAdmin() {
+        return DB::select("select * from roles where id not in (".UserKeys::ROLE_USER_ROOT.",".UserKeys::ROLE_USER_ADMIN.")");
+    }
+
+    public function addRolesToUser($userId, $roles) {
+        if (count($roles) > NumberKeys::NUMBER_ZERO) {
+            // Elimina los roles de usuario
+            $this->deleteRolesByUser($userId);
+            // Add roles
+            foreach ($roles as $role) {
+                DB::insert('insert into role_user (user_id, role_id) values (?, ?)', [$userId, $role]);
+            }
+        }
+    }
+
+    private function deleteRolesByUser($userId) {
+        DB::table('role_user')->where('user_id', $userId)->delete();
     }
 }

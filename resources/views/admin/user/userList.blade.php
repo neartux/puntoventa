@@ -69,24 +69,24 @@
                                         @{{ user.address }}
                                     </td>
                                     <td>
-                                        @{{ user.phone }}
+                                        @{{ user.cell_phone }}
                                     </td>
                                     <td>
                                         @{{ user.email }}
                                     </td>
                                     <td>
                                         <a href="javascript:;" class="btn btn-xs blue"
-                                           data-ng-click="ctrl.showEditProduct($index, product)">
+                                           data-ng-click="ctrl.showEditUser(user)">
                                             <i class="icon-note"></i>
                                             Modificar
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs green"
-                                           data-ng-click="ctrl.showEditStock($index, product)">
+                                        <a href="javascript:;" class="btn btn-xs blue"
+                                           data-ng-click="ctrl.changePassword(user)">
                                             <i class="icon-note"></i>
-                                            Stock
+                                            Cambiar Password
                                         </a>
                                         <a href="javascript:;" class="btn btn-xs red"
-                                           data-ng-click="ctrl.deleteProduct($index, product.id)">
+                                           data-ng-click="ctrl.deleteUser(user.id)">
                                             <i class="icon-trash"></i>
                                             Eliminar
                                         </a>
@@ -102,159 +102,11 @@
             </div>
         </div>
 
-        <div class="modal fade bs-modal-md" id="userModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <form name="productForm" novalidate>
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title bold">@{{ ctrl.titleFormAction }}</h4>
-                        </div>
-                        <div class="modal-body profile-userpic">
+        @include('admin.user.modalDataUser')
 
-                            <div class="portlet light mb-n">
+        @include('admin.user.modalChangePassword')
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.code.$invalid && !productForm.code.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Código</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="code" data-ng-model="ctrl.productTO.code"
-                                                       class="form-control" required id="codeProduct" maxlength="50">
-                                                <span ng-show="productForm.code.$invalid && !productForm.code.$pristine"
-                                                      class="help-block">El código es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.description.$invalid && !productForm.description.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Descripción</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="description" data-ng-model="ctrl.product.description"
-                                                       class="form-control" required id="descriptionProduct" maxlength="50">
-                                                <span ng-show="productForm.description.$invalid && !productForm.description.$pristine"
-                                                      class="help-block">El nombre es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.description.$invalid && !productForm.description.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Departamento</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <select name="deparment" id="deparmentProduct" class="form-control" data-ng-model="ctrl.product.deparment" required
-                                                        ng-options="d as d.description for d in ctrl.deparments" ></select>
-                                                <span ng-show="productForm.deparment.$invalid && !productForm.deparment.$pristine"
-                                                      class="help-block">El deparmento es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.unit.$invalid && !productForm.unit.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Unidad</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <select name="unit" id="unitProduct" class="form-control" data-ng-model="ctrl.product.unit" required
-                                                        ng-options="u as u.description for u in ctrl.unities"></select>
-                                                <!-- <input type="text" name="unit" data-ng-model="ctrl.product.unit"
-                                                    class="form-control" required id="unitProduct" maxlength="50"> -->
-                                                <span ng-show="productForm.unit.$invalid && !productForm.unit.$pristine"
-                                                      class="help-block">La unidad es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.purcharseprice.$invalid && !productForm.purcharseprice.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Precio compra</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="purcharseprice" data-ng-model="ctrl.product.purchase_price"
-                                                       class="form-control" required id="purcharsepriceProduct" maxlength="50">
-                                                <span ng-show="productForm.purcharseprice.$invalid && !productForm.purcharseprice.$pristine"
-                                                      class="help-block">El precio de compra es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.saleprice.$invalid && !productForm.saleprice.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Precio venta</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="saleprice" data-ng-model="ctrl.product.sale_price"
-                                                       class="form-control" required id="salepriceProduct" maxlength="50">
-                                                <span ng-show="productForm.saleprice.$invalid && !productForm.saleprice.$pristine"
-                                                      class="help-block">El precio de venta es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.wholeprice.$invalid && !productForm.wholeprice.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Precio mayoreo</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="wholesale" data-ng-model="ctrl.product.wholesale_price"
-                                                       class="form-control" required id="wholesaleProduct" maxlength="50">
-                                                <span ng-show="productForm.wholesale.$invalid && !productForm.wholesale.$pristine"
-                                                      class="help-block">El precio mayoreo es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.stock.$invalid && !productForm.stock.$pristine }">
-                                            <label for="adjustQuantity"
-                                                class="col-md-12 control-label bold">Stock</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="stock" data-ng-model="ctrl.product.current_stock"
-                                                    class="form-control" required id="stockProduct" maxlength="50">
-                                                <span ng-show="productForm.stock.$invalid && !productForm.stock.$pristine"
-                                                    class="help-block">El stock es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-                                    <div class="col-md-6">
-                                        <div class="form-group" ng-class="{ 'has-error' : productForm.minimunstock.$invalid && !productForm.minimunstock.$pristine }">
-                                            <label for="adjustQuantity"
-                                                   class="col-md-12 control-label bold">Mínimo Stock</label>
-                                            <br>
-                                            <div class="col-md-12">
-                                                <input type="text" name="minimunstock" data-ng-model="ctrl.product.minimum_stock"
-                                                       class="form-control" required id="minimunstockProduct" maxlength="50">
-                                                <span ng-show="productForm.minimunstock.$invalid && !productForm.minimunstock.$pristine"
-                                                      class="help-block">El mínimo de stock es requerido.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Cerrar</button>
-                            <button type="button" data-ng-disabled="productForm.$invalid" class="btn green"
-                                    data-ng-click="ctrl.validateProduct(productForm.$valid)">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('admin.user.modalRoles')
 
 
     </div>

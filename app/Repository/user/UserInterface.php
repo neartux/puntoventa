@@ -16,4 +16,16 @@ interface UserInterface {
     public function findStore();
 
     public function findPrintingTicketById($printingFormatId);
+
+    public function existUserName($id, $userName);
+
+    public function saveUser($userData);
+
+    public function updateUser($userData);
+
+    public function deleteUser($id);
+
+    public function findRolesNoAdmin();
+
+    public function addRolesToUser($userId, $roles);
 }
