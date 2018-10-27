@@ -58,6 +58,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
 
     Route::get('/pointsale/findPreviewWithdrawalCaja', 'PointSaleController@findPreviewWithdrawal');
 
+    Route::get('/pointsale/findWithDrawalsByCaja', 'PointSaleController@findWithDrawalsByCaja');
+
     Route::post('/pointsale/closeCaja', 'PointSaleController@closeCaja');
 
     Route::post('/pointsale/applyWithdrawal', 'PointSaleController@applyWithdrawal');

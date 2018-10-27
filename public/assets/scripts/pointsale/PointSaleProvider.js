@@ -109,6 +109,10 @@
             });
         };
 
+        service.findWithDrawalsByCaja = function () {
+            return $http.get(service.contextPath+'/admin/pointsale/findWithDrawalsByCaja');
+        };
+
         return service;
 
     });

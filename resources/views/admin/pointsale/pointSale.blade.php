@@ -46,11 +46,13 @@
                                     <div class="color-white bold mb-n mt-xs" style="margin-top: -10px !important"> Descuento </div>
                                 </a>
 
-                                <a href="javascript:;" class="icon-btn btn btn blue-chambray border-blue-chambray ml-xl"
-                                   data-ng-click="ctrl.findPreviewWithdrawal();">
-                                    <i class="icon-share-alt mt-xs fnt-sz-25"></i>
-                                    <div class="color-white bold mb-n mt-n"> Retiro </div>
-                                </a>
+                                @role('admin')
+                                    <a href="javascript:;" class="icon-btn btn btn blue-chambray border-blue-chambray ml-xl"
+                                       data-ng-click="ctrl.findPreviewWithdrawal();">
+                                        <i class="icon-share-alt mt-xs fnt-sz-25"></i>
+                                        <div class="color-white bold mb-n mt-n"> Retiro </div>
+                                    </a>
+                                @endrole
 
                                 <a href="javascript:;" class="icon-btn btn btn red-intense border-blue-chambray"
                                     data-ng-click="ctrl.findPreviewCloseCaja();">
@@ -302,6 +304,8 @@
         @include('admin.pointsale.bulkProductModalView')
 
         @include('admin.pointsale.withdrawalCajaModalView')
+
+        @include('admin.pointsale.withDrawalsModalView')
 
 
     </div>

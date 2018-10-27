@@ -21,7 +21,9 @@
         ctrl.temporalProductBulk = ELEMENT_NOT_FOUND;
         ctrl.reasonsWithdrawal = { data: [] };
         ctrl.previewDataWithdrawal = { data: [] };
+        ctrl.withdrawalList = { data: [] };
         ctrl.withDrawalData = {};
+        ctrl.totalAmountWithdrawal = NUMBER_ZERO;
 
 
         /**
@@ -910,6 +912,7 @@
                                 showNotification('Error', res.data.message, 'error');
                             } else {
                                 showNotification('Info', res.data.message, 'info');
+                                $("#withdrawalCajaModal").modal("hide");
                             }
                         });
                     }
@@ -917,6 +920,21 @@
             }
         };
 
+        ctrl.viewWithDrawals = function() {
+            return PointSaleService.findWithDrawalsByCaja().then(function (res) {
+                ctrl.withdrawalList.data = res.data;
+                ctrl.sumAmountWithdrawals();
+                $("#retirosModal").modal();
+            });
+        };
+
+        ctrl.sumAmountWithdrawals = function () {
+            var totalAmount = NUMBER_ZERO;
+            angular.forEach(ctrl.withdrawalList.data, function (retiro, key) {
+                totalAmount += parseFloat(retiro.amount);
+            });
+            ctrl.totalAmountWithdrawal = totalAmount;
+        };
 
     });
 

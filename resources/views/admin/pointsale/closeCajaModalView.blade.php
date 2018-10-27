@@ -41,8 +41,15 @@
                                     <span class="badge badge-danger fnt-sz-14 bold"> @{{ ctrl.cajaPreview.amountCancelledSales | currency }} </span>
                                 </li>
                                 <li class="list-group-item p-xs"
+                                    data-ng-show="ctrl.cajaPreview.caja.total_withdrawals">
+                                    <a href="javascript:;" data-ng-click="ctrl.viewWithDrawals();">
+                                        Retiros
+                                    </a>
+                                    <span class="badge badge-danger fnt-sz-14 bold"> @{{ ctrl.cajaPreview.caja.total_withdrawals | currency }} </span>
+                                </li>
+                                <li class="list-group-item p-xs"
                                     data-ng-show="ctrl.cajaPreview.totalAmountSales"> Total
-                                    <span class="badge badge-primary fnt-sz-14 bold"> @{{ (ctrl.cajaPreview.totalAmountSales - ctrl.cajaPreview.amountCancelledSales) | currency }} </span>
+                                    <span class="badge badge-primary fnt-sz-14 bold"> @{{ ((ctrl.cajaPreview.totalAmountSales - ctrl.cajaPreview.amountCancelledSales)-ctrl.cajaPreview.caja.total_withdrawals) | currency }} </span>
                                 </li>
                             </ul>
 

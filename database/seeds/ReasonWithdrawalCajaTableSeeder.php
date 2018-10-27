@@ -14,7 +14,10 @@ class ReasonWithdrawalCajaTableSeeder extends Seeder {
      */
     public function run() {
         $reason = [
-            ['id' => ApplicationKeys::REASON_WITHDRAWAL_SALE_CANCELLATION, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Cancelacion de venta']
+            ['id' => ApplicationKeys::REASON_WITHDRAWAL_SALE_CANCELLATION, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Cancelacion de venta'],
+            ['id' => ApplicationKeys::REASON_WITHDRAWAL_PAYMENT_PROVIDER, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Pago a Proveedor'],
+            ['id' => ApplicationKeys::REASON_WITHDRAWAL_PAYMENT_NOTE, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Pago de Nota'],
+            ['id' => ApplicationKeys::REASON_WITHDRAWAL_OTHER, 'status_id' => StatusKeys::STATUS_ACTIVE, 'description' => 'Otro'],
         ];
 
         DB::table('reason_withdrawal_caja')->insert($reason);
