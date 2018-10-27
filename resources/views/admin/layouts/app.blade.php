@@ -126,7 +126,7 @@
                         </li>
                         @role('admin')
                             <li class="nav-item  ">
-                                <a href="{{ route('admin_deparment_list') }}" class="nav-link ">
+                                <a href="{{ route('users_list') }}" class="nav-link ">
                                     <span class="title">Usuarios</span>
                                 </a>
                             </li>

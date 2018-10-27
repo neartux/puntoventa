@@ -158,6 +158,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()  {
 
     Route::post('/security/changePassword', 'SecurityController@changePassword');
 
+    Route::get('/security/displayUsers', 'SecurityController@displayUsers')->name('users_list');
+
     Route::get('/security/existUserName/{id}/{userName}', 'SecurityController@existUserName');
 
     Route::get('/security/findUsers', 'SecurityController@findUsers');

@@ -56,6 +56,10 @@ class SecurityController extends Controller {
         return response()->json(array("error" => false, "message" => "Se ha actualizado la contraseña correctamente"));
     }
 
+    public function displayUsers() {
+        return view('admin.user.userList');
+    }
+
     public function existUserName($id, $userName) {
         return response()->json(array("exist" => $this->user->existUserName($id, $userName)));
     }

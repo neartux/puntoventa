@@ -67,7 +67,7 @@
         ctrl.findUsers = function () {
             startLoading("Cargando usuarios");
             return SecurityService.findUsers().then(function (res) {
-                ctrl.userList.data = res.data.data;
+                ctrl.userList.data = res.data;
                 stopLoading();
             }, stopLoading());
         };
@@ -86,7 +86,7 @@
         /**
          * Despliega la vista para crear un nuevo usuario
          */
-        ctrl.viewCreateUser = function () {
+        ctrl.showCreateUser = function () {
             ctrl.userTO = {};
             ctrl.userTO.id = 0;
             ctrl.isCreateUser = true;
@@ -117,7 +117,7 @@
                         }
                     }
                     else {
-                        showNotification("Info", "El nombre de usuario "+ctrl.userTO.user_name+" no esta disponible", "info");
+                        showNotification("Warning", "El nombre de usuario "+ctrl.userTO.user_name+" no esta disponible", "warning");
                     }
                 });
             }
@@ -145,7 +145,7 @@
          *
          * @param user El usuario de la lista de usuarios
          */
-        ctrl.editUser = function (user) {
+        ctrl.showEditUser = function (user) {
             ctrl.isCreateUser = false;
             ctrl.userTO = angular.copy(user);
             ctrl.titleFormAction = 'Editar usuario ' + user.user_name;

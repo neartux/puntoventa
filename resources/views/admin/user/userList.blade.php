@@ -52,7 +52,7 @@
                                     <th>Nombre</th>
                                     <th>Usuario</th>
                                     <th>Direcci&oacute;n</th>
-                                    <th>Tel&eacute;fono</th>
+                                    <th>Celular</th>
                                     <th>Email</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -80,7 +80,7 @@
                                             <i class="icon-note"></i>
                                             Modificar
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs blue"
+                                        <a href="javascript:;" class="btn btn-xs green"
                                            data-ng-click="ctrl.changePasswordView(user)">
                                             <i class="icon-note"></i>
                                             Cambiar Password

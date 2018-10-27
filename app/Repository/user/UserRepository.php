@@ -10,7 +10,6 @@ namespace App\Repository\user;
 use App\Models\LocationData;
 use App\Models\PersonalData;
 use App\User;
-use App\Utils\Keys\common\ApplicationKeys;
 use App\Utils\Keys\common\NumberKeys;
 use App\Utils\Keys\common\StatusKeys;
 use App\Utils\Keys\user\UserKeys;
@@ -41,9 +40,10 @@ class UserRepository implements UserInterface {
     }
 
     public function findAllUsers() {
-        return DB::select("SELECT users.id,users.user_name,personal_data.name,personal_data.last_name
+        return DB::select("SELECT users.id,users.user_name,personal_data.name,personal_data.last_name,location_data.address,location_data.cell_phone,location_data.email
           FROM users
           INNER JOIN personal_data ON users.personal_data_id = personal_data.id
+          INNER JOIN location_data ON users.location_data_id = location_data.id
           WHERE users.status_id = ".StatusKeys::STATUS_ACTIVE."
           AND users.id != ".UserKeys::USER_ROOT_ID);
     }
@@ -69,7 +69,6 @@ class UserRepository implements UserInterface {
     public function saveUser($userData) {
         $location_data = new LocationData();
         $location_data->address = $userData['address'];
-        $location_data->phone = $userData['phone'];
         $location_data->cell_phone = $userData['cell_phone'];
         $location_data->email = $userData['email'];
 
@@ -104,7 +103,6 @@ class UserRepository implements UserInterface {
             throw new \Exception("El usuario no se encontro");
         }
         $user->locationData->address = $userData['address'];
-        $user->locationData->phone = $userData['phone'];
         $user->locationData->cell_phone = $userData['cell_phone'];
         $user->locationData->email = $userData['email'];
 

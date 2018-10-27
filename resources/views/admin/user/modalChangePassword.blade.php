@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 <h4 class="modal-title">
-                    <span class="">Cambiar Contraseña @{{ ctrl.userTO.user_name }}</span>
+                    <span class="">Cambiar Contraseña</span> <span class="text-bold">@{{ ctrl.userTO.user_name }}</span>
                 </h4>
             </div>
             <form name="securityForm" novalidate>

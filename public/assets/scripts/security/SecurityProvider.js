@@ -30,7 +30,7 @@
         service.saveUser = function (user) {
             return $http({
                 method: 'POST',
-                url: service.contextPath + '/admin/user/save',
+                url: service.contextPath + '/admin/security/save',
                 data: $.param(user),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
@@ -39,7 +39,7 @@
         service.updateUser = function (user) {
             return $http({
                 method: 'POST',
-                url: service.contextPath + '/admin/user/update',
+                url: service.contextPath + '/admin/security/update',
                 data: $.param(user),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
@@ -48,7 +48,7 @@
         service.deleteUser = function (id) {
             return $http({
                 method: 'POST',
-                url: service.contextPath + '/admin/user/delete',
+                url: service.contextPath + '/admin/security/delete',
                 data: $.param({id: id}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
