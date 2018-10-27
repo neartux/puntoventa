@@ -46,4 +46,6 @@ interface SaleInterface {
     public function findEfectivoByCaja($cajaId);
 
     public function findEfectivoRetiradoByCaja($cajaId);
+
+    public function findWithdrawalsByCaja($cajaId);
 }

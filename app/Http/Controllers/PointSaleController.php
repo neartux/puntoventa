@@ -155,4 +155,10 @@ class PointSaleController extends Controller {
         }
     }
 
+    public function findWithDrawalsByCaja() {
+        // Busca la caja abierta
+        $caja = $this->sale->findCajaOpened();
+        return response()->json($this->sale->findWithdrawalsByCaja($caja->id));
+    }
+
 }

@@ -228,7 +228,11 @@ class SaleRepository implements SaleInterface {
         $this->createMovementCaja(ApplicationKeys::MOVEMENT_TYPE_SALIDA, ApplicationKeys::REASON_WITHDRAWAL_SALE_CANCELLATION, $sale->id,
             $sale->total, 'Sale Cancelled', '');
         // Resta el monto a la caja
-        $this->subtractAmountToCaja($sale->total);
+        try {
+            $this->subtractAmountToCaja($sale->total);
+        } catch (\Exception $e) {
+            throw new $e;
+        }
         // Regresa el producto al inventario
         $this->returnProductToStock($sale, $userId);
     }
@@ -274,8 +278,14 @@ class SaleRepository implements SaleInterface {
         if($saldo <= NumberKeys::NUMBER_ZERO) {
             throw new \Exception("No hay efectivo disponible en caja");
         }
-        // Crea el movimiento de caja
-        $this->createMovementCaja(ApplicationKeys::MOVEMENT_TYPE_SALIDA, $reasonId, null, $amount, $reference, $comments);
+        try {
+            // Crea el movimiento de caja
+            $this->createMovementCaja(ApplicationKeys::MOVEMENT_TYPE_SALIDA, $reasonId, null, $amount, $reference, $comments);
+            // Aplica retiro a la caja
+            $this->subtractAmountToCaja($amount);
+        } catch (\Exception $e) {
+            throw new $e;
+        }
     }
 
     public function findCajasByDate($startDate, $endDate) {
@@ -390,5 +400,16 @@ class SaleRepository implements SaleInterface {
         INNER JOIN caja ON movements_caja.caja_id = caja.id
         WHERE caja.id = '.$cajaId.'
         AND movements_caja.reason_withdrawal_caja_id IN ('.ApplicationKeys::REASON_WITHDRAWAL_PAYMENT_PROVIDER.','.ApplicationKeys::REASON_WITHDRAWAL_PAYMENT_NOTE.','.ApplicationKeys::REASON_WITHDRAWAL_OTHER.')')->retirado;
+    }
+
+    public function findWithdrawalsByCaja($cajaId) {
+        return DB::select("SELECT movements_caja.amount,movements_caja.reference,movements_caja.created_at,movements_caja.comments,
+        reason_withdrawal_caja.description
+        FROM movements_caja
+        INNER JOIN reason_withdrawal_caja ON movements_caja.reason_withdrawal_caja_id = reason_withdrawal_caja.id
+        WHERE movements_caja.caja_id = ".$cajaId."
+        AND movements_caja.status_id = ".StatusKeys::STATUS_ACTIVE."
+        AND movements_caja.movement_type_id = ".ApplicationKeys::MOVEMENT_TYPE_SALIDA."
+        AND movements_caja.reason_withdrawal_caja_id IS NOT NULL");
     }
 }
