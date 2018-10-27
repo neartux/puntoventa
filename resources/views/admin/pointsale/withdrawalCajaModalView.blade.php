@@ -15,7 +15,7 @@
                             <div class="col-sm-6">
                                 <h5><span class="bold">Efectivo Disponible </span></h5>
                                 <span class="font-blue bold">
-                                    @{{ ((ctrl.previewDataWithdrawal.data.totalCash + ctrl.previewDataWithdrawal.data.caja.opening_amount) - ctrl.previewDataWithdrawal.data.totalWithdrawal) | currency }}
+                                    @{{ ctrl.previewDataWithdrawal.totalEfective | currency }}
                                 </span>
                             </div>
                             <div class="col-sm-6">

@@ -107,8 +107,8 @@ class PointSaleController extends Controller {
             // Obtiene las ventas por cada departamento
             $salesByDeparment = $this->sale->findSalesByDeparmentAndCaja($caja->id);
             // Envia el resultado
-            $data = array("totalSales" => $totalSales, "totalAmountSales" => $totalAmountSales, "caja" => $caja,
-                "salesByDeparment" => $salesByDeparment, "amountCancelledSales" => $amountCancelledSales);
+            $data = array("totalSales" => $totalSales, "totalAmountSales" => floatval($totalAmountSales), "caja" => $caja,
+                "salesByDeparment" => $salesByDeparment, "amountCancelledSales" => floatval($amountCancelledSales));
             return response()->json(array("error" => false, "cajaPreview" => $data));
         } catch (\Exception $e) {
             return response()->json(array("error" => true, "message" => $e->getMessage()));

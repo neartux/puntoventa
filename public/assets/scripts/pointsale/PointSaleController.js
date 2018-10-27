@@ -738,8 +738,14 @@
             return PointSaleService.findPreviewCloseCaja().then(function (response) {
                 response.data.cajaPreview.caja.opening_date_format = ctrl.formatDateToString(response.data.cajaPreview.caja.opening_date);
                 ctrl.cajaPreview = response.data.cajaPreview;
+                ctrl.calculateTotalAmountsToCaja();
                 $("#closeCajaModal").modal();
             });
+        };
+
+        ctrl.calculateTotalAmountsToCaja = function () {
+            ctrl.cajaPreview.amountSalesAndCaja = ((parseFloat(ctrl.cajaPreview.totalAmountSales) - parseFloat(ctrl.cajaPreview.amountCancelledSales)) + parseFloat(ctrl.cajaPreview.caja.opening_amount));
+            ctrl.cajaPreview.finalAmount = ((parseFloat(ctrl.cajaPreview.totalAmountSales) - parseFloat(ctrl.cajaPreview.amountCancelledSales))-parseFloat(ctrl.cajaPreview.caja.total_withdrawals));
         };
 
         /**
@@ -890,8 +896,13 @@
         ctrl.findPreviewWithdrawal = function () {
             return PointSaleService.findPreviewWithdrawal().then(function (res) {
                 ctrl.previewDataWithdrawal.data = res.data.data;
+                ctrl.calculateAmountWithdrawals();
                 $("#withdrawalCajaModal").modal();
             });
+        };
+
+        ctrl.calculateAmountWithdrawals = function () {
+            ctrl.previewDataWithdrawal.totalEfective = ((parseFloat(ctrl.previewDataWithdrawal.data.totalCash) + parseFloat(ctrl.previewDataWithdrawal.data.caja.opening_amount)) - parseFloat(ctrl.previewDataWithdrawal.data.totalWithdrawal));
         };
 
         ctrl.applyWithdrawal = function (isValid) { // TODO hay bug, probar y corregir llegado momento

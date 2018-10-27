@@ -14,7 +14,7 @@
                         <div class="col-sm-6">
                             <h4><span class="bold">Monto Ventas + Caja <br></span>
                                 <span class="font-blue bold">
-                                    @{{ (((ctrl.cajaPreview.totalAmountSales - ctrl.cajaPreview.amountCancelledSales)) + ctrl.cajaPreview.caja.opening_amount)| currency }}
+                                    @{{ ctrl.cajaPreview.amountSalesAndCaja | currency }}
                                 </span></h4>
                         </div>
                         <div class="col-sm-6">
@@ -49,7 +49,7 @@
                                 </li>
                                 <li class="list-group-item p-xs"
                                     data-ng-show="ctrl.cajaPreview.totalAmountSales"> Total
-                                    <span class="badge badge-primary fnt-sz-14 bold"> @{{ ((ctrl.cajaPreview.totalAmountSales - ctrl.cajaPreview.amountCancelledSales)-ctrl.cajaPreview.caja.total_withdrawals) | currency }} </span>
+                                    <span class="badge badge-primary fnt-sz-14 bold"> @{{ ctrl.cajaPreview.finalAmount | currency }} </span>
                                 </li>
                             </ul>
 

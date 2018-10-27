@@ -74,7 +74,7 @@
                                         <div class="input-group" data-ng-show="!ctrl.productSearchMode">
                                             <div class="input-icon">
                                                 <i class="fa fa-barcode"></i>
-                                                <input class="form-control" type="text" id="productId" placeholder="código de producto"
+                                                <input class="form-control" type="text" id="productId" placeholder="codigo de producto"
                                                        data-ng-model="ctrl.codeProduct" data-ng-enter="ctrl.findProductByCode();">
                                             </div>
                                             <span class="input-group-btn">
