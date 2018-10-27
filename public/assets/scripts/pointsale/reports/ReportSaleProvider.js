@@ -64,7 +64,7 @@
             angular.forEach(service.sales.data, function (sale, key) {
                 // TODO cambiar a futuro al key estatus activo
                 totalA += sale.total;
-                if(sale.status_id === 1) {
+                if(parseInt(sale.status_id) === 1) {
                     total += sale.total;
                     totalSales ++;
                 }

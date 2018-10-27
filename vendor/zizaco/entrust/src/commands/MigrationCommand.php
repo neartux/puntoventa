@@ -32,7 +32,7 @@ class MigrationCommand extends Command
      *
      * @return void
      */
-    public function handle()
+    public function fire()
     {
         $this->laravel->view->addNamespace('entrust', substr(__DIR__, 0, -8).'views');
 
