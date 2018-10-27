@@ -124,7 +124,7 @@
                                                    class="col-md-12 control-label bold">Contraseña</label>
                                             <br>
                                             <div class="col-md-12">
-                                                <input type="text" name="password" data-ng-model="ctrl.userTO.password"
+                                                <input type="password" name="password" data-ng-model="ctrl.userTO.password"
                                                        class="form-control" ng-required="ctrl.isCreateUser" id="password" maxlength="50" tabindex="7">
                                                 <span ng-show="userForm.password.$invalid && !userForm.password.$pristine"
                                                       class="help-block">La contraseña es requerido.</span>
@@ -138,7 +138,7 @@
                                                    class="col-md-12 control-label bold">Repetir Contraseña</label>
                                             <br>
                                             <div class="col-md-12">
-                                                <input type="text" name="password_confirmation" data-ng-model="ctrl.userTO.password_confirmation"
+                                                <input type="password" name="password_confirmation" data-ng-model="ctrl.userTO.password_confirmation"
                                                        class="form-control" ng-required="ctrl.isCreateUser" id="password_confirmation" maxlength="50" tabindex="8">
                                                 <span ng-show="userForm.password_confirmation.$invalid && !userForm.password_confirmation.$pristine"
                                                       class="help-block">Este campo es requerido.</span>

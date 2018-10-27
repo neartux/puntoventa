@@ -109,11 +109,13 @@
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
+                        @role('admin')
                         <li class="nav-item  ">
                             <a href="{{ route('admin_provider_list') }}" class="nav-link ">
                                 <span class="title">Proveedores</span>
                             </a>
                         </li>
+                        @endrole
                         <li class="nav-item  ">
                             <a href="{{ route('admin_client_list') }}" class="nav-link ">
                                 <span class="title">Clientes</span>
@@ -133,12 +135,14 @@
                         @endrole
                     </ul>
                 </li>
+                @role('admin')
                 <li class="nav-item">
                     <a href="{{ route('admin_stock_list') }}" class="nav-link nav-toggle">
                         <i class="fa fa-cube"></i>
                         <span class="title">Inventario</span>
                     </a>
                 </li>
+                @endrole
                 <li class="nav-item">
                     <a href="{{ route('point_sale_view') }}" class="nav-link nav-toggle">
                         <i class="icon-basket-loaded"></i>
@@ -191,7 +195,7 @@
                         @endrole
                     </ul>
                 </li>
-
+                @role('admin')
                 <li class="nav-item">
                     <a href="javascript:;" class="nav-link nav-toggle">
                         <i class="icon-settings"></i>
@@ -211,6 +215,7 @@
                         </li>
                     </ul>
                 </li>
+                @endrole
 
             </ul>
         </div>
